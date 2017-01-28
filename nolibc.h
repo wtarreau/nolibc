@@ -504,6 +504,150 @@ asm(".section .text\n"
     "hlt\n"                     // ensure it does not
     "");
 
+#elif defined(__ARM_EABI__)
+/* Syscalls for ARM in ARM or Thumb modes :
+ *   - registers are 32-bit
+ *   - stack is 8-byte aligned
+ *     ( http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.faqs/ka4127.html)
+ *   - syscall number is passed in r7
+ *   - arguments are in r0, r1, r2, r3, r4, r5
+ *   - the system call is performed by calling svc #0
+ *   - syscall return comes in r0.
+ *   - only lr is clobbered.
+ *   - the arguments are cast to long and assigned into the target registers
+ *     which are then simply passed as registers to the asm code, so that we
+ *     don't have to experience issues with register contraints.
+ *   - the syscall number is always specified last in order to allow to force
+ *     some registers before (gcc refuses a %-register at the last position).
+ */
+
+#define my_syscall0(num)                                                      \
+({                                                                            \
+	register long _num asm("r7") = (num);                                 \
+	register long _arg1 asm("r0");                                        \
+                                                                              \
+	asm volatile (                                                        \
+		"svc #0\n"                                                    \
+		: "=r"(_arg1)                                                 \
+		: "r"(_num)                                                   \
+		: "memory", "cc", "lr"                                        \
+	);                                                                    \
+	_arg1;                                                                \
+})
+
+#define my_syscall1(num, arg1)                                                \
+({                                                                            \
+	register long _num asm("r7") = (num);                                 \
+	register long _arg1 asm("r0") = (long)(arg1);                         \
+                                                                              \
+	asm volatile (                                                        \
+		"svc #0\n"                                                    \
+		: "=r"(_arg1)                                                 \
+		: "r"(_arg1),                                                 \
+		  "r"(_num)                                                   \
+		: "memory", "cc", "lr"                                        \
+	);                                                                    \
+	_arg1;                                                                \
+})
+
+#define my_syscall2(num, arg1, arg2)                                          \
+({                                                                            \
+	register long _num asm("r7") = (num);                                 \
+	register long _arg1 asm("r0") = (long)(arg1);                         \
+	register long _arg2 asm("r1") = (long)(arg2);                         \
+                                                                              \
+	asm volatile (                                                        \
+		"svc #0\n"                                                    \
+		: "=r"(_arg1)                                                 \
+		: "r"(_arg1), "r"(_arg2),                                     \
+		  "r"(_num)                                                   \
+		: "memory", "cc", "lr"                                        \
+	);                                                                    \
+	_arg1;                                                                \
+})
+
+#define my_syscall3(num, arg1, arg2, arg3)                                    \
+({                                                                            \
+	register long _num asm("r7") = (num);                                 \
+	register long _arg1 asm("r0") = (long)(arg1);                         \
+	register long _arg2 asm("r1") = (long)(arg2);                         \
+	register long _arg3 asm("r2") = (long)(arg3);                         \
+                                                                              \
+	asm volatile (                                                        \
+		"svc #0\n"                                                    \
+		: "=r"(_arg1)                                                 \
+		: "r"(_arg1), "r"(_arg2), "r"(_arg3),                         \
+		  "r"(_num)                                                   \
+		: "memory", "cc", "lr"                                        \
+	);                                                                    \
+	_arg1;                                                                \
+})
+
+#define my_syscall4(num, arg1, arg2, arg3, arg4)                              \
+({                                                                            \
+	register long _num asm("r7") = (num);                                 \
+	register long _arg1 asm("r0") = (long)(arg1);                         \
+	register long _arg2 asm("r1") = (long)(arg2);                         \
+	register long _arg3 asm("r2") = (long)(arg3);                         \
+	register long _arg4 asm("r3") = (long)(arg4);                         \
+                                                                              \
+	asm volatile (                                                        \
+		"svc #0\n"                                                    \
+		: "=r"(_arg1)                                                 \
+		: "r"(_arg1), "r"(_arg2), "r"(_arg3), "r"(_arg4),             \
+		  "r"(_num)                                                   \
+		: "memory", "cc", "lr"                                        \
+	);                                                                    \
+	_arg1;                                                                \
+})
+
+#define my_syscall5(num, arg1, arg2, arg3, arg4, arg5)                        \
+({                                                                            \
+	register long _num asm("r7") = (num);                                 \
+	register long _arg1 asm("r0") = (long)(arg1);                         \
+	register long _arg2 asm("r1") = (long)(arg2);                         \
+	register long _arg3 asm("r2") = (long)(arg3);                         \
+	register long _arg4 asm("r3") = (long)(arg4);                         \
+	register long _arg5 asm("r4") = (long)(arg5);                         \
+                                                                              \
+	asm volatile (                                                        \
+		"svc #0\n"                                                    \
+		: "=r" (_arg1)                                                \
+		: "r"(_arg1), "r"(_arg2), "r"(_arg3), "r"(_arg4), "r"(_arg5), \
+		  "r"(_num)                                                   \
+		: "memory", "cc", "lr"                                        \
+	);                                                                    \
+	_arg1;                                                                \
+})
+
+/* startup code */
+asm(".section .text\n"
+    ".global _start\n"
+    "_start:\n"
+#if defined(__THUMBEB__) || defined(__THUMBEL__)
+    /* We enter here in 32-bit mode but if some previous functions were in
+     * 16-bit mode, the assembler cannot know, so we need to tell it we're in
+     * 32-bit now, then switch to 16-bit (is there a better way to do it than
+     * adding 1 by hand ?) and tell the asm we're now in 16-bit mode so that
+     * it generates correct instructions. Note that we do not support thumb1.
+     */
+    ".code 32\n"
+    "add     r0, pc, #1\n"
+    "bx      r0\n"
+    ".code 16\n"
+#endif
+    "pop {%r0}\n"                 // argc was in the stack
+    "mov %r1, %sp\n"              // argv = sp
+    "add %r2, %r1, %r0, lsl #2\n" // envp = argv + 4*argc ...
+    "add %r2, %r2, $4\n"          //        ... + 4
+    "and %r3, %r1, $-8\n"         // AAPCS : sp must be 8-byte aligned in the
+    "mov %sp, %r3\n"              //         callee, an bl doesn't push (lr=pc)
+    "bl main\n"                   // main() returns the status code, we'll exit with it.
+    "and %r0, %r0, $0xff\n"       // limit exit code to 8 bits
+    "movs r7, $1\n"               // NR_exit == 1
+    "svc $0x00\n"
+    "");
+
 #endif
 
 
