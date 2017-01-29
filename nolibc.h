@@ -1634,6 +1634,30 @@ char *strcpy(char *dst, const char *src)
 }
 
 static __attribute((unused))
+char *strchr(const char *s, int c)
+{
+	while (*s) {
+		if (*s == (char)c)
+			return (char *)s;
+		s++;
+	}
+	return NULL;
+}
+
+static __attribute((unused))
+char *strrchr(const char *s, int c)
+{
+	const char *ret = NULL;
+
+	while (*s) {
+		if (*s == (char)c)
+			ret = s;
+		s++;
+	}
+	return (char *)ret;
+}
+
+static __attribute((unused))
 size_t nolibc_strlen(const char *str)
 {
 	size_t len;
