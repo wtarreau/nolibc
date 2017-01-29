@@ -210,6 +210,11 @@ struct rusage {
 #define O_APPEND        0x400
 #define O_NONBLOCK      0x800
 
+/* lseek */
+#define SEEK_SET        0
+#define SEEK_CUR        1
+#define SEEK_END        2
+
 struct stat {
 	dev_t     st_dev;     /* ID of device containing file */
 	ino_t     st_ino;     /* inode number */
@@ -1050,6 +1055,12 @@ int sys_link(const char *old, const char *new)
 }
 
 static __attribute((unused))
+off_t sys_lseek(int fd, off_t offset, int whence)
+{
+        return my_syscall3(__NR_lseek, fd, offset, whence);
+}
+
+static __attribute((unused))
 int sys_mkdir(const char *path, mode_t mode)
 {
         return my_syscall2(__NR_mkdir, path, mode);
@@ -1334,6 +1345,18 @@ static __attribute((unused))
 int link(const char *old, const char *new)
 {
 	int ret = sys_link(old, new);
+
+	if (ret < 0) {
+		SET_ERRNO(-ret);
+		ret = -1;
+	}
+	return ret;
+}
+
+static __attribute((unused))
+off_t lseek(int fd, off_t offset, int whence)
+{
+	off_t ret = sys_lseek(fd, offset, whence);
 
 	if (ret < 0) {
 		SET_ERRNO(-ret);
