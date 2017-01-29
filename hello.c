@@ -69,6 +69,7 @@ int main(int argc, char **argv, char **envp)
 	int err;
 
 	print_int("pid ", getpid());
+	print_int("arg1", argc > 1 ? atol(argv[1]) : 0);
 
 	writestr(1, "msg : <");
 	ret = write(1, "hello", 5);

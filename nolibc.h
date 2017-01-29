@@ -1648,6 +1648,41 @@ size_t nolibc_strlen(const char *str)
 		nolibc_strlen((str));           \
 })
 
+static __attribute__((unused))
+int isdigit(int c)
+{
+	return (unsigned int)(c - '0') <= 9;
+}
+
+static __attribute__((unused))
+long atol(const char *s)
+{
+	unsigned long ret = 0;
+	unsigned long d;
+	int neg = 0;
+
+	if (*s == '-') {
+		neg = 1;
+		s++;
+	}
+
+	while (1) {
+		d = (*s++) - '0';
+		if (d > 9)
+			break;
+		ret *= 10;
+		ret += d;
+	}
+
+	return neg ? -ret : ret;
+}
+
+static __attribute__((unused))
+int atoi(const char *s)
+{
+	return atol(s);
+}
+
 __attribute__((weak,unused))
 void *memcpy(void *dst, const void *src, size_t len)
 {
