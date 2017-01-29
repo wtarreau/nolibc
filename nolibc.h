@@ -1634,13 +1634,19 @@ char *strcpy(char *dst, const char *src)
 }
 
 static __attribute((unused))
-size_t strlen(const char *str)
+size_t nolibc_strlen(const char *str)
 {
 	size_t len;
 
 	for (len = 0; str[len]; len++);
 	return len;
 }
+
+#define strlen(str) ({                          \
+	__builtin_constant_p((str)) ?           \
+		__builtin_strlen((str)) :       \
+		nolibc_strlen((str));           \
+})
 
 __attribute__((weak,unused))
 void *memcpy(void *dst, const void *src, size_t len)
