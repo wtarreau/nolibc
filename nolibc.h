@@ -1025,6 +1025,12 @@ pid_t sys_fork(void)
 }
 
 static __attribute((unused))
+int sys_fsync(int fd)
+{
+        return my_syscall1(__NR_fsync, fd);
+}
+
+static __attribute((unused))
 pid_t sys_getpgrp(void)
 {
         return my_syscall0(__NR_getpgrp);
@@ -1285,6 +1291,18 @@ static __attribute((unused))
 pid_t fork(void)
 {
 	pid_t ret = sys_fork();
+
+	if (ret < 0) {
+		SET_ERRNO(-ret);
+		ret = -1;
+	}
+	return ret;
+}
+
+static __attribute((unused))
+int fsync(int fd)
+{
+	int ret = sys_fsync(fd);
 
 	if (ret < 0) {
 		SET_ERRNO(-ret);
