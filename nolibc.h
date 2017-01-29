@@ -1,3 +1,11 @@
+/* some archs (at least aarch64) don't expose the regular syscalls anymore by
+ * default, either because they have an "_at" replacement, or because there are
+ * more modern alternatives. For now we'd rather still use them.
+ */
+#define __ARCH_WANT_SYSCALL_NO_AT
+#define __ARCH_WANT_SYSCALL_NO_FLAGS
+#define __ARCH_WANT_SYSCALL_DEPRECATED
+
 #include <asm/unistd.h>
 #include <asm/ioctls.h>
 #include <asm/errno.h>
@@ -646,6 +654,134 @@ asm(".section .text\n"
     "and %r0, %r0, $0xff\n"       // limit exit code to 8 bits
     "movs r7, $1\n"               // NR_exit == 1
     "svc $0x00\n"
+    "");
+
+#elif defined(__aarch64__)
+/* Syscalls for AARCH64 :
+ *   - registers are 64-bit
+ *   - stack is 16-byte aligned
+ *   - syscall number is passed in x8
+ *   - arguments are in x0, x1, x2, x3, x4, x5
+ *   - the system call is performed by calling svc 0
+ *   - syscall return comes in x0.
+ *   - the arguments are cast to long and assigned into the target registers
+ *     which are then simply passed as registers to the asm code, so that we
+ *     don't have to experience issues with register contraints.
+ */
+
+#define my_syscall0(num)                                                      \
+({                                                                            \
+	register long _num  asm("x8") = (num);                                \
+	register long _arg1 asm("x0");                                        \
+                                                                              \
+	asm volatile (                                                        \
+		"svc #0\n"                                                    \
+		: "=r"(_arg1)                                                 \
+		: "r"(_num)                                                   \
+		: "memory", "cc"                                              \
+	);                                                                    \
+	_arg1;                                                                \
+})
+
+#define my_syscall1(num, arg1)                                                \
+({                                                                            \
+	register long _num  asm("x8") = (num);                                \
+	register long _arg1 asm("x0") = (long)(arg1);                         \
+                                                                              \
+	asm volatile (                                                        \
+		"svc #0\n"                                                    \
+		: "=r"(_arg1)                                                 \
+		: "r"(_arg1),                                                 \
+		  "r"(_num)                                                   \
+		: "memory", "cc"                                              \
+	);                                                                    \
+	_arg1;                                                                \
+})
+
+#define my_syscall2(num, arg1, arg2)                                          \
+({                                                                            \
+	register long _num  asm("x8") = (num);                                \
+	register long _arg1 asm("x0") = (long)(arg1);                         \
+	register long _arg2 asm("x1") = (long)(arg2);                         \
+                                                                              \
+	asm volatile (                                                        \
+		"svc #0\n"                                                    \
+		: "=r"(_arg1)                                                 \
+		: "r"(_arg1), "r"(_arg2),                                     \
+		  "r"(_num)                                                   \
+		: "memory", "cc"                                              \
+	);                                                                    \
+	_arg1;                                                                \
+})
+
+#define my_syscall3(num, arg1, arg2, arg3)                                    \
+({                                                                            \
+	register long _num  asm("x8") = (num);                                \
+	register long _arg1 asm("x0") = (long)(arg1);                         \
+	register long _arg2 asm("x1") = (long)(arg2);                         \
+	register long _arg3 asm("x2") = (long)(arg3);                         \
+                                                                              \
+	asm volatile (                                                        \
+		"svc #0\n"                                                    \
+		: "=r"(_arg1)                                                 \
+		: "r"(_arg1), "r"(_arg2), "r"(_arg3),                         \
+		  "r"(_num)                                                   \
+		: "memory", "cc"                                              \
+	);                                                                    \
+	_arg1;                                                                \
+})
+
+#define my_syscall4(num, arg1, arg2, arg3, arg4)                              \
+({                                                                            \
+	register long _num  asm("x8") = (num);                                \
+	register long _arg1 asm("x0") = (long)(arg1);                         \
+	register long _arg2 asm("x1") = (long)(arg2);                         \
+	register long _arg3 asm("x2") = (long)(arg3);                         \
+	register long _arg4 asm("x3") = (long)(arg4);                         \
+                                                                              \
+	asm volatile (                                                        \
+		"svc #0\n"                                                    \
+		: "=r"(_arg1)                                                 \
+		: "r"(_arg1), "r"(_arg2), "r"(_arg3), "r"(_arg4),             \
+		  "r"(_num)                                                   \
+		: "memory", "cc"                                              \
+	);                                                                    \
+	_arg1;                                                                \
+})
+
+#define my_syscall5(num, arg1, arg2, arg3, arg4, arg5)                        \
+({                                                                            \
+	register long _num  asm("x8") = (num);                                \
+	register long _arg1 asm("x0") = (long)(arg1);                         \
+	register long _arg2 asm("x1") = (long)(arg2);                         \
+	register long _arg3 asm("x2") = (long)(arg3);                         \
+	register long _arg4 asm("x3") = (long)(arg4);                         \
+	register long _arg5 asm("x4") = (long)(arg5);                         \
+                                                                              \
+	asm volatile (                                                        \
+		"svc #0\n"                                                    \
+		: "=r" (_arg1)                                                \
+		: "r"(_arg1), "r"(_arg2), "r"(_arg3), "r"(_arg4), "r"(_arg5), \
+		  "r"(_num)                                                   \
+		: "memory", "cc"                                              \
+	);                                                                    \
+	_arg1;                                                                \
+})
+
+/* startup code */
+asm(".section .text\n"
+    ".global _start\n"
+    "_start:\n"
+    "ldr x0, [sp]\n"              // argc (x0) was in the stack
+    "add x1, sp, 8\n"             // argv (x1) = sp
+    "lsl x2, x0, 3\n"             // envp (x2) = 8*argc ...
+    "add x2, x2, 8\n"             //           + 8 (skip null)
+    "add x2, x2, x1\n"            //           + argv
+    "and sp, x1, -16\n"           // sp must be 16-byte aligned in the callee
+    "bl main\n"                   // main() returns the status code, we'll exit with it.
+    "and x0, x0, 0xff\n"          // limit exit code to 8 bits
+    "mov x8, 93\n"                // NR_exit == 93
+    "svc #0\n"
     "");
 
 #elif defined(__mips__) && defined(_ABIO32)
