@@ -6,34 +6,6 @@
 #include <errno.h>
 #endif
 
-static const char *ltoa(long in)
-{
-	static char buffer[30];
-
-        char *pos;
-        int neg = 0;
-        unsigned long n;
-
-        pos = buffer + sizeof(buffer) - 1;
-        *pos-- = '\0';
-
-        if (in < 0) {
-                neg = 1;
-                n = -in;
-        }
-        else
-                n = in;
-
-        do {
-                *pos-- = '0' + n % 10;
-                n /= 10;
-        } while (n && pos >= buffer);
-
-        if (neg && pos > buffer)
-                *pos-- = '-';
-        return pos + 1;
-}
-
 void writestr(int fd, const char *str)
 {
 	write(fd, str, strlen(str));
