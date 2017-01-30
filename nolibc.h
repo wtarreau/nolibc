@@ -112,6 +112,10 @@ static int errno;
 #define SET_ERRNO(v) do { } while (0)
 #endif
 
+/* errno codes all ensure that they will not conflict with a valid pointer
+ * because they all correspond to the highest addressable memry page.
+ */
+#define MAX_ERRNO 4095
 
 /* Declare a few quite common macros and types that usually are in stdlib.h,
  * stdint.h, ctype.h, unistd.h and a few other common locations.
