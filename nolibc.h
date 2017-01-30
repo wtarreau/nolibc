@@ -970,6 +970,12 @@ asm(".section .text\n"
  * static will lead to them being inlined in most cases, but it's still possible
  * to reference them by a pointer if needed.
  */
+static __attribute((unused))
+void *sys_brk(void *addr)
+{
+	return (void *)my_syscall1(__NR_brk, addr);
+}
+
 static __attribute__((noreturn,unused))
 void sys_exit(int status)
 {
@@ -1203,6 +1209,18 @@ ssize_t sys_write(int fd, const void *buf, size_t count)
  * They rely on the functions above. Similarly they're marked static so that it
  * is possible to assign pointers to them if needed.
  */
+
+static __attribute((unused))
+int brk(void *addr)
+{
+	void *ret = sys_brk(addr);
+
+	if (!ret) {
+		SET_ERRNO(ENOMEM);
+		return -1;
+	}
+	return 0;
+}
 
 static __attribute__((noreturn,unused))
 void exit(int status)
@@ -1474,6 +1492,19 @@ ssize_t read(int fd, void *buf, size_t count)
 		ret = -1;
 	}
 	return ret;
+}
+
+static __attribute((unused))
+void *sbrk(intptr_t inc)
+{
+	void *ret;
+
+	/* first call to find current end */
+	if ((ret = sys_brk(0)) && (sys_brk(ret + inc) == ret + inc))
+		return ret + inc;
+
+	SET_ERRNO(ENOMEM);
+	return (void *)-1;
 }
 
 static __attribute((unused))
