@@ -1704,6 +1704,18 @@ void *memset(void *dst, int b, size_t len)
 }
 
 static __attribute((unused))
+int memcmp(const void *s1, const void *s2, size_t n)
+{
+	size_t ofs = 0;
+	char c1 = 0;
+
+	while (ofs < n && !(c1 = ((char *)s1)[ofs] - ((char *)s2)[ofs])) {
+		ofs++;
+	}
+	return c1;
+}
+
+static __attribute((unused))
 char *strcpy(char *dst, const char *src)
 {
 	char *ret = dst;
