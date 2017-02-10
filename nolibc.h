@@ -258,7 +258,7 @@ struct stat {
  *   - arguments are in rdi, rsi, rdx, r10, r8, r9 respectively
  *   - the system call is performed by calling the syscall instruction
  *   - syscall return comes in rax
- *   - rcx and r11 may be clobbered, others are preserved.
+ *   - rcx and r8..r11 may be clobbered, others are preserved.
  *   - the arguments are cast to long and assigned into the target registers
  *     which are then simply passed as registers to the asm code, so that we
  *     don't have to experience issues with register contraints.
@@ -275,7 +275,7 @@ struct stat {
 		"syscall\n"                                                   \
 		: "=a" (_ret)                                                 \
 		: "0"(_num)                                                   \
-		: "rcx", "r11", "memory", "cc"                                \
+		: "rcx", "r8", "r9", "r10", "r11", "memory", "cc"                                \
 	);                                                                    \
 	_ret;                                                                 \
 })
@@ -291,7 +291,7 @@ struct stat {
 		: "=a" (_ret)                                                 \
 		: "r"(_arg1),                                                 \
 		  "0"(_num)                                                   \
-		: "rcx", "r11", "memory", "cc"                                \
+		: "rcx", "r8", "r9", "r10", "r11", "memory", "cc"                                \
 	);                                                                    \
 	_ret;                                                                 \
 })
@@ -308,7 +308,7 @@ struct stat {
 		: "=a" (_ret)                                                 \
 		: "r"(_arg1), "r"(_arg2),                                     \
 		  "0"(_num)                                                   \
-		: "rcx", "r11", "memory", "cc"                                \
+		: "rcx", "r8", "r9", "r10", "r11", "memory", "cc"                                \
 	);                                                                    \
 	_ret;                                                                 \
 })
@@ -326,7 +326,7 @@ struct stat {
 		: "=a" (_ret)                                                 \
 		: "r"(_arg1), "r"(_arg2), "r"(_arg3),                         \
 		  "0"(_num)                                                   \
-		: "rcx", "r11", "memory", "cc"                                \
+		: "rcx", "r8", "r9", "r10", "r11", "memory", "cc"                                \
 	);                                                                    \
 	_ret;                                                                 \
 })
@@ -345,7 +345,7 @@ struct stat {
 		: "=a" (_ret)                                                 \
 		: "r"(_arg1), "r"(_arg2), "r"(_arg3), "r"(_arg4),             \
 		  "0"(_num)                                                   \
-		: "rcx", "r11", "memory", "cc"                                \
+		: "rcx", "r8", "r9", "r10", "r11", "memory", "cc"                                \
 	);                                                                    \
 	_ret;                                                                 \
 })
@@ -365,7 +365,7 @@ struct stat {
 		: "=a" (_ret)                                                 \
 		: "r"(_arg1), "r"(_arg2), "r"(_arg3), "r"(_arg4), "r"(_arg5), \
 		  "0"(_num)                                                   \
-		: "rcx", "r11", "memory", "cc"                                \
+		: "rcx", "r8", "r9", "r10", "r11", "memory", "cc"                                \
 	);                                                                    \
 	_ret;                                                                 \
 })
