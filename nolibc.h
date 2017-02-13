@@ -342,10 +342,10 @@ struct stat {
                                                                               \
 	asm volatile (                                                        \
 		"syscall\n"                                                   \
-		: "=a" (_ret)                                                 \
+		: "=a" (_ret), "=r"(_arg4)                                    \
 		: "r"(_arg1), "r"(_arg2), "r"(_arg3), "r"(_arg4),             \
 		  "0"(_num)                                                   \
-		: "rcx", "r8", "r9", "r10", "r11", "memory", "cc"                                \
+		: "rcx", "r8", "r9", "r11", "memory", "cc"                    \
 	);                                                                    \
 	_ret;                                                                 \
 })
@@ -362,10 +362,10 @@ struct stat {
                                                                               \
 	asm volatile (                                                        \
 		"syscall\n"                                                   \
-		: "=a" (_ret)                                                 \
+		: "=a" (_ret), "=r"(_arg4), "=r"(_arg5)                       \
 		: "r"(_arg1), "r"(_arg2), "r"(_arg3), "r"(_arg4), "r"(_arg5), \
 		  "0"(_num)                                                   \
-		: "rcx", "r8", "r9", "r10", "r11", "memory", "cc"                                \
+		: "rcx", "r9", "r11", "memory", "cc"                          \
 	);                                                                    \
 	_ret;                                                                 \
 })
