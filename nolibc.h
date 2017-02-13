@@ -164,6 +164,15 @@ struct timeval {
 	long    tv_usec;
 };
 
+/* for getdents64() */
+struct linux_dirent64 {
+	uint64_t       d_ino;
+	int64_t        d_off;
+	unsigned short d_reclen;
+	unsigned char  d_type;
+	char           d_name[];
+};
+
 /* commonly an fd_set represents 256 FDs */
 #define FD_SETSIZE 256
 typedef struct { uint32_t fd32[FD_SETSIZE/32]; } fd_set;
@@ -216,6 +225,16 @@ struct rusage {
 #define O_TRUNC         0x200
 #define O_APPEND        0x400
 #define O_NONBLOCK      0x800
+#define O_DIRECTORY   0x10000
+
+#define DT_UNKNOWN 0
+#define DT_FIFO    1
+#define DT_CHR     2
+#define DT_DIR     4
+#define DT_BLK     6
+#define DT_REG     8
+#define DT_LNK    10
+#define DT_SOCK   12
 
 /* lseek */
 #define SEEK_SET        0
@@ -1044,6 +1063,12 @@ int sys_fsync(int fd)
 }
 
 static __attribute((unused))
+int sys_getdents64(int fd, struct linux_dirent64 *dirp, int count)
+{
+        return my_syscall3(__NR_getdents64, fd, dirp, count);
+}
+
+static __attribute((unused))
 pid_t sys_getpgrp(void)
 {
         return my_syscall0(__NR_getpgrp);
@@ -1328,6 +1353,18 @@ static __attribute((unused))
 int fsync(int fd)
 {
 	int ret = sys_fsync(fd);
+
+	if (ret < 0) {
+		SET_ERRNO(-ret);
+		ret = -1;
+	}
+	return ret;
+}
+
+static __attribute((unused))
+int getdents64(int fd, struct linux_dirent64 *dirp, int count)
+{
+	int ret = sys_getdents64(fd, dirp, count);
 
 	if (ret < 0) {
 		SET_ERRNO(-ret);
