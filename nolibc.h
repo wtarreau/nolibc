@@ -241,6 +241,15 @@ struct rusage {
 #define SEEK_CUR        1
 #define SEEK_END        2
 
+/* reboot */
+#define LINUX_REBOOT_MAGIC1         0xfee1dead
+#define LINUX_REBOOT_MAGIC2         0x28121969
+#define LINUX_REBOOT_CMD_HALT       0xcdef0123
+#define LINUX_REBOOT_CMD_POWER_OFF  0x4321fedc
+#define LINUX_REBOOT_CMD_RESTART    0x01234567
+#define LINUX_REBOOT_CMD_SW_SUSPEND 0xd000fce2
+
+
 struct stat {
 	dev_t     st_dev;     /* ID of device containing file */
 	ino_t     st_ino;     /* inode number */
@@ -1148,6 +1157,12 @@ ssize_t sys_read(int fd, void *buf, size_t count)
 }
 
 static __attribute((unused))
+ssize_t sys_reboot(int magic1, int magic2, int cmd, void *arg)
+{
+        return my_syscall4(__NR_reboot, magic1, magic2, cmd, arg);
+}
+
+static __attribute((unused))
 int sys_sched_yield(void)
 {
         return my_syscall0(__NR_sched_yield);
@@ -1523,6 +1538,18 @@ static __attribute((unused))
 ssize_t read(int fd, void *buf, size_t count)
 {
 	ssize_t ret = sys_read(fd, buf, count);
+
+	if (ret < 0) {
+		SET_ERRNO(-ret);
+		ret = -1;
+	}
+	return ret;
+}
+
+static __attribute((unused))
+int reboot(int cmd)
+{
+	int ret = sys_reboot(LINUX_REBOOT_MAGIC1, LINUX_REBOOT_MAGIC2, cmd, 0);
 
 	if (ret < 0) {
 		SET_ERRNO(-ret);
