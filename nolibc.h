@@ -998,7 +998,7 @@ asm(".section .text\n"
  * static will lead to them being inlined in most cases, but it's still possible
  * to reference them by a pointer if needed.
  */
-static __attribute((unused))
+static __attribute__((unused))
 void *sys_brk(void *addr)
 {
 	return (void *)my_syscall1(__NR_brk, addr);
@@ -1011,164 +1011,164 @@ void sys_exit(int status)
 	while(1); // shut the "noreturn" warnings.
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int sys_chdir(const char *path)
 {
 	return my_syscall1(__NR_chdir, path);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int sys_chmod(const char *path, mode_t mode)
 {
 	return my_syscall2(__NR_chmod, path, mode);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int sys_chown(const char *path, uid_t owner, gid_t group)
 {
         return my_syscall3(__NR_chown, path, owner, group);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int sys_chroot(const char *path)
 {
         return my_syscall1(__NR_chroot, path);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int sys_close(int fd)
 {
         return my_syscall1(__NR_close, fd);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int sys_dup(int fd)
 {
         return my_syscall1(__NR_dup, fd);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int sys_dup2(int old, int new)
 {
         return my_syscall2(__NR_dup2, old, new);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int sys_execve(const char *filename, char *const argv[], char *const envp[])
 {
         return my_syscall3(__NR_execve, filename, argv, envp);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 pid_t sys_fork(void)
 {
         return my_syscall0(__NR_fork);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int sys_fsync(int fd)
 {
         return my_syscall1(__NR_fsync, fd);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int sys_getdents64(int fd, struct linux_dirent64 *dirp, int count)
 {
         return my_syscall3(__NR_getdents64, fd, dirp, count);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 pid_t sys_getpgrp(void)
 {
         return my_syscall0(__NR_getpgrp);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 pid_t sys_getpid(void)
 {
         return my_syscall0(__NR_getpid);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int sys_ioctl(int fd, unsigned long req, void *value)
 {
         return my_syscall3(__NR_ioctl, fd, req, value);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int sys_kill(pid_t pid, int signal)
 {
         return my_syscall2(__NR_kill, pid, signal);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int sys_link(const char *old, const char *new)
 {
         return my_syscall2(__NR_link, old, new);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 off_t sys_lseek(int fd, off_t offset, int whence)
 {
         return my_syscall3(__NR_lseek, fd, offset, whence);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int sys_mkdir(const char *path, mode_t mode)
 {
         return my_syscall2(__NR_mkdir, path, mode);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 long sys_mknod(const char *path, mode_t mode, dev_t dev)
 {
         return my_syscall3(__NR_mknod, path, mode, dev);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int sys_mount(const char *src, const char *tgt, const char *fst,
                      unsigned long flags, const void *data)
 {
         return my_syscall5(__NR_mount, src, tgt, fst, flags, data);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int sys_open(const char *path, int flags, mode_t mode)
 {
         return my_syscall3(__NR_open, path, flags, mode);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int sys_pivot_root(const char *new, const char *old)
 {
         return my_syscall2(__NR_pivot_root, new, old);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int sys_poll(struct pollfd *fds, int nfds, int timeout)
 {
 	return my_syscall3(__NR_poll, fds, nfds, timeout);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 ssize_t sys_read(int fd, void *buf, size_t count)
 {
         return my_syscall3(__NR_read, fd, buf, count);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 ssize_t sys_reboot(int magic1, int magic2, int cmd, void *arg)
 {
         return my_syscall4(__NR_reboot, magic1, magic2, cmd, arg);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int sys_sched_yield(void)
 {
         return my_syscall0(__NR_sched_yield);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int sys_select(int nfds, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeval *timeout)
 {
 #ifndef __NR_select
@@ -1177,68 +1177,68 @@ int sys_select(int nfds, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeva
 	return my_syscall5(__NR_select, nfds, rfds, wfds, efds, timeout);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int sys_setpgid(pid_t pid, pid_t pgid)
 {
         return my_syscall2(__NR_setpgid, pid, pgid);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 pid_t sys_setsid(void)
 {
         return my_syscall0(__NR_setsid);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int sys_stat(const char *path, struct stat *buf)
 {
         return my_syscall2(__NR_stat, path, buf);
 }
 
 
-static __attribute((unused))
+static __attribute__((unused))
 int sys_symlink(const char *old, const char *new)
 {
         return my_syscall2(__NR_symlink, old, new);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 mode_t sys_umask(mode_t mode)
 {
         return my_syscall1(__NR_umask, mode);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int sys_umount2(const char *path, int flags)
 {
         return my_syscall2(__NR_umount2, path, flags);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int sys_unlink(const char *path)
 {
         return my_syscall1(__NR_unlink, path);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 pid_t sys_wait4(pid_t pid, int *status, int options, struct rusage *rusage)
 {
         return my_syscall4(__NR_wait4, pid, status, options, rusage);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 pid_t sys_waitpid(pid_t pid, int *status, int options)
 {
         return sys_wait4(pid, status, options, 0);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 pid_t sys_wait(int *status)
 {
         return sys_waitpid(-1, status, 0);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 ssize_t sys_write(int fd, const void *buf, size_t count)
 {
         return my_syscall3(__NR_write, fd, buf, count);
@@ -1250,7 +1250,7 @@ ssize_t sys_write(int fd, const void *buf, size_t count)
  * is possible to assign pointers to them if needed.
  */
 
-static __attribute((unused))
+static __attribute__((unused))
 int brk(void *addr)
 {
 	void *ret = sys_brk(addr);
@@ -1268,7 +1268,7 @@ void exit(int status)
 	sys_exit(status);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int chdir(const char *path)
 {
 	int ret = sys_chdir(path);
@@ -1280,7 +1280,7 @@ int chdir(const char *path)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int chmod(const char *path, mode_t mode)
 {
 	int ret = sys_chmod(path, mode);
@@ -1292,7 +1292,7 @@ int chmod(const char *path, mode_t mode)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int chown(const char *path, uid_t owner, gid_t group)
 {
 	int ret = sys_chown(path, owner, group);
@@ -1304,7 +1304,7 @@ int chown(const char *path, uid_t owner, gid_t group)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int chroot(const char *path)
 {
 	int ret = sys_chroot(path);
@@ -1316,7 +1316,7 @@ int chroot(const char *path)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int close(int fd)
 {
 	int ret = sys_close(fd);
@@ -1328,7 +1328,7 @@ int close(int fd)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int dup2(int old, int new)
 {
 	int ret = sys_dup2(old, new);
@@ -1340,7 +1340,7 @@ int dup2(int old, int new)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int execve(const char *filename, char *const argv[], char *const envp[])
 {
 	int ret = sys_execve(filename, argv, envp);
@@ -1352,7 +1352,7 @@ int execve(const char *filename, char *const argv[], char *const envp[])
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 pid_t fork(void)
 {
 	pid_t ret = sys_fork();
@@ -1364,7 +1364,7 @@ pid_t fork(void)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int fsync(int fd)
 {
 	int ret = sys_fsync(fd);
@@ -1376,7 +1376,7 @@ int fsync(int fd)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int getdents64(int fd, struct linux_dirent64 *dirp, int count)
 {
 	int ret = sys_getdents64(fd, dirp, count);
@@ -1388,7 +1388,7 @@ int getdents64(int fd, struct linux_dirent64 *dirp, int count)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 pid_t getpgrp(void)
 {
 	pid_t ret = sys_getpgrp();
@@ -1400,7 +1400,7 @@ pid_t getpgrp(void)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 pid_t getpid(void)
 {
 	pid_t ret = sys_getpid();
@@ -1412,7 +1412,7 @@ pid_t getpid(void)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int ioctl(int fd, unsigned long req, void *value)
 {
 	int ret = sys_ioctl(fd, req, value);
@@ -1424,7 +1424,7 @@ int ioctl(int fd, unsigned long req, void *value)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int kill(pid_t pid, int signal)
 {
 	int ret = sys_kill(pid, signal);
@@ -1436,7 +1436,7 @@ int kill(pid_t pid, int signal)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int link(const char *old, const char *new)
 {
 	int ret = sys_link(old, new);
@@ -1448,7 +1448,7 @@ int link(const char *old, const char *new)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 off_t lseek(int fd, off_t offset, int whence)
 {
 	off_t ret = sys_lseek(fd, offset, whence);
@@ -1460,7 +1460,7 @@ off_t lseek(int fd, off_t offset, int whence)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int mkdir(const char *path, mode_t mode)
 {
 	int ret = sys_mkdir(path, mode);
@@ -1472,7 +1472,7 @@ int mkdir(const char *path, mode_t mode)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int mknod(const char *path, mode_t mode, dev_t dev)
 {
 	int ret = sys_mknod(path, mode, dev);
@@ -1484,7 +1484,7 @@ int mknod(const char *path, mode_t mode, dev_t dev)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int mount(const char *src, const char *tgt,
           const char *fst, unsigned long flags,
           const void *data)
@@ -1498,7 +1498,7 @@ int mount(const char *src, const char *tgt,
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int open(const char *path, int flags, mode_t mode)
 {
 	int ret = sys_open(path, flags, mode);
@@ -1510,7 +1510,7 @@ int open(const char *path, int flags, mode_t mode)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int pivot_root(const char *new, const char *old)
 {
 	int ret = sys_pivot_root(new, old);
@@ -1522,7 +1522,7 @@ int pivot_root(const char *new, const char *old)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int poll(struct pollfd *fds, int nfds, int timeout)
 {
 	int ret = sys_poll(fds, nfds, timeout);
@@ -1534,7 +1534,7 @@ int poll(struct pollfd *fds, int nfds, int timeout)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 ssize_t read(int fd, void *buf, size_t count)
 {
 	ssize_t ret = sys_read(fd, buf, count);
@@ -1546,7 +1546,7 @@ ssize_t read(int fd, void *buf, size_t count)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int reboot(int cmd)
 {
 	int ret = sys_reboot(LINUX_REBOOT_MAGIC1, LINUX_REBOOT_MAGIC2, cmd, 0);
@@ -1558,7 +1558,7 @@ int reboot(int cmd)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 void *sbrk(intptr_t inc)
 {
 	void *ret;
@@ -1571,7 +1571,7 @@ void *sbrk(intptr_t inc)
 	return (void *)-1;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int sched_yield(void)
 {
 	int ret = sys_sched_yield();
@@ -1583,7 +1583,7 @@ int sched_yield(void)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int select(int nfds, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeval *timeout)
 {
 	int ret = sys_select(nfds, rfds, wfds, efds, timeout);
@@ -1595,7 +1595,7 @@ int select(int nfds, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeval *t
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int setpgid(pid_t pid, pid_t pgid)
 {
 	int ret = sys_setpgid(pid, pgid);
@@ -1607,7 +1607,7 @@ int setpgid(pid_t pid, pid_t pgid)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 pid_t setsid(void)
 {
 	pid_t ret = sys_setsid();
@@ -1619,7 +1619,7 @@ pid_t setsid(void)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 unsigned int sleep(unsigned int seconds)
 {
 	struct timeval my_timeval = { seconds, 0 };
@@ -1630,7 +1630,7 @@ unsigned int sleep(unsigned int seconds)
 		return 0;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int stat(const char *path, struct stat *buf)
 {
 	int ret = sys_stat(path, buf);
@@ -1642,7 +1642,7 @@ int stat(const char *path, struct stat *buf)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int symlink(const char *old, const char *new)
 {
 	int ret = sys_symlink(old, new);
@@ -1654,19 +1654,19 @@ int symlink(const char *old, const char *new)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int tcsetpgrp(int fd, pid_t pid)
 {
 	return ioctl(fd, TIOCSPGRP, &pid);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 mode_t umask(mode_t mode)
 {
 	return sys_umask(mode);
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int umount2(const char *path, int flags)
 {
 	int ret = sys_umount2(path, flags);
@@ -1678,7 +1678,7 @@ int umount2(const char *path, int flags)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int unlink(const char *path)
 {
 	int ret = sys_unlink(path);
@@ -1690,7 +1690,7 @@ int unlink(const char *path)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 pid_t wait4(pid_t pid, int *status, int options, struct rusage *rusage)
 {
 	pid_t ret = sys_wait4(pid, status, options, rusage);
@@ -1702,7 +1702,7 @@ pid_t wait4(pid_t pid, int *status, int options, struct rusage *rusage)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 pid_t waitpid(pid_t pid, int *status, int options)
 {
 	pid_t ret = sys_waitpid(pid, status, options);
@@ -1714,7 +1714,7 @@ pid_t waitpid(pid_t pid, int *status, int options)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 pid_t wait(int *status)
 {
 	pid_t ret = sys_wait(status);
@@ -1726,7 +1726,7 @@ pid_t wait(int *status)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 ssize_t write(int fd, const void *buf, size_t count)
 {
 	ssize_t ret = sys_write(fd, buf, count);
@@ -1744,7 +1744,7 @@ ssize_t write(int fd, const void *buf, size_t count)
  * error when building a program made of multiple files (not recommended).
  */
 
-static __attribute((unused))
+static __attribute__((unused))
 void *memmove(void *dst, const void *src, size_t len)
 {
 	ssize_t pos = (dst <= src) ? -1 : (long)len;
@@ -1757,7 +1757,7 @@ void *memmove(void *dst, const void *src, size_t len)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 void *memset(void *dst, int b, size_t len)
 {
 	char *p = dst;
@@ -1767,7 +1767,7 @@ void *memset(void *dst, int b, size_t len)
 	return dst;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 int memcmp(const void *s1, const void *s2, size_t n)
 {
 	size_t ofs = 0;
@@ -1779,7 +1779,7 @@ int memcmp(const void *s1, const void *s2, size_t n)
 	return c1;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 char *strcpy(char *dst, const char *src)
 {
 	char *ret = dst;
@@ -1788,7 +1788,7 @@ char *strcpy(char *dst, const char *src)
 	return ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 char *strchr(const char *s, int c)
 {
 	while (*s) {
@@ -1799,7 +1799,7 @@ char *strchr(const char *s, int c)
 	return NULL;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 char *strrchr(const char *s, int c)
 {
 	const char *ret = NULL;
@@ -1812,7 +1812,7 @@ char *strrchr(const char *s, int c)
 	return (char *)ret;
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 size_t nolibc_strlen(const char *str)
 {
 	size_t len;
@@ -1899,13 +1899,13 @@ int raise(int signal)
 
 /* Here come a few helper functions */
 
-static __attribute((unused))
+static __attribute__((unused))
 void FD_ZERO(fd_set *set)
 {
 	memset(set, 0, sizeof(*set));
 }
 
-static __attribute((unused))
+static __attribute__((unused))
 void FD_SET(int fd, fd_set *set)
 {
 	if (fd < 0 || fd >= FD_SETSIZE)
@@ -1914,7 +1914,7 @@ void FD_SET(int fd, fd_set *set)
 }
 
 /* WARNING, it only deals with the 4096 first majors and 256 first minors */
-static __attribute((unused))
+static __attribute__((unused))
 dev_t makedev(unsigned int major, unsigned int minor)
 {
 	return ((major & 0xfff) << 8) | (minor & 0xff);
