@@ -215,18 +215,6 @@ struct rusage {
 #define S_ISLNK(mode)  (((mode) & S_IFLNK) == S_IFLNK)
 #define S_ISSOCK(mode) (((mode) & S_IFSOCK) == S_IFSOCK)
 
-/* fcntl / open */
-#define O_RDONLY            0
-#define O_WRONLY            1
-#define O_RDWR              2
-#define O_CREAT          0x40
-#define O_EXCL           0x80
-#define O_NOCTTY        0x100
-#define O_TRUNC         0x200
-#define O_APPEND        0x400
-#define O_NONBLOCK      0x800
-#define O_DIRECTORY   0x10000
-
 #define DT_UNKNOWN 0
 #define DT_FIFO    1
 #define DT_CHR     2
@@ -414,6 +402,18 @@ asm(".section .text\n"
     "hlt\n"                     // ensure it does not return
     "");
 
+/* fcntl / open */
+#define O_RDONLY            0
+#define O_WRONLY            1
+#define O_RDWR              2
+#define O_CREAT          0x40
+#define O_EXCL           0x80
+#define O_NOCTTY        0x100
+#define O_TRUNC         0x200
+#define O_APPEND        0x400
+#define O_NONBLOCK      0x800
+#define O_DIRECTORY   0x10000
+
 #elif defined(__i386__) || defined(__i486__) || defined(__i586__) || defined(__i686__)
 /* Syscalls for i386 :
  *   - mostly similar to x86_64
@@ -551,6 +551,18 @@ asm(".section .text\n"
     "int    $0x80\n"            // exit now
     "hlt\n"                     // ensure it does not
     "");
+
+/* fcntl / open */
+#define O_RDONLY            0
+#define O_WRONLY            1
+#define O_RDWR              2
+#define O_CREAT          0x40
+#define O_EXCL           0x80
+#define O_NOCTTY        0x100
+#define O_TRUNC         0x200
+#define O_APPEND        0x400
+#define O_NONBLOCK      0x800
+#define O_DIRECTORY   0x10000
 
 #elif defined(__ARM_EABI__)
 /* Syscalls for ARM in ARM or Thumb modes :
@@ -696,6 +708,18 @@ asm(".section .text\n"
     "svc $0x00\n"
     "");
 
+/* fcntl / open */
+#define O_RDONLY            0
+#define O_WRONLY            1
+#define O_RDWR              2
+#define O_CREAT          0x40
+#define O_EXCL           0x80
+#define O_NOCTTY        0x100
+#define O_TRUNC         0x200
+#define O_APPEND        0x400
+#define O_NONBLOCK      0x800
+#define O_DIRECTORY    0x4000
+
 #elif defined(__aarch64__)
 /* Syscalls for AARCH64 :
  *   - registers are 64-bit
@@ -823,6 +847,18 @@ asm(".section .text\n"
     "mov x8, 93\n"                // NR_exit == 93
     "svc #0\n"
     "");
+
+/* fcntl / open */
+#define O_RDONLY            0
+#define O_WRONLY            1
+#define O_RDWR              2
+#define O_CREAT          0x40
+#define O_EXCL           0x80
+#define O_NOCTTY        0x100
+#define O_TRUNC         0x200
+#define O_APPEND        0x400
+#define O_NONBLOCK      0x800
+#define O_DIRECTORY    0x4000
 
 #elif defined(__mips__) && defined(_ABIO32)
 /* Syscalls for MIPS ABI O32 :
@@ -989,6 +1025,18 @@ asm(".section .text\n"
     "syscall\n"
     ".end __start\n"
     "");
+
+/* fcntl / open */
+#define O_RDONLY            0
+#define O_WRONLY            1
+#define O_RDWR              2
+#define O_APPEND       0x0008
+#define O_NONBLOCK     0x0080
+#define O_CREAT        0x0100
+#define O_TRUNC        0x0200
+#define O_EXCL         0x0400
+#define O_NOCTTY       0x0800
+#define O_DIRECTORY   0x10000
 
 #endif
 
