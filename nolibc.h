@@ -1026,122 +1026,122 @@ int sys_chmod(const char *path, mode_t mode)
 static __attribute__((unused))
 int sys_chown(const char *path, uid_t owner, gid_t group)
 {
-        return my_syscall3(__NR_chown, path, owner, group);
+	return my_syscall3(__NR_chown, path, owner, group);
 }
 
 static __attribute__((unused))
 int sys_chroot(const char *path)
 {
-        return my_syscall1(__NR_chroot, path);
+	return my_syscall1(__NR_chroot, path);
 }
 
 static __attribute__((unused))
 int sys_close(int fd)
 {
-        return my_syscall1(__NR_close, fd);
+	return my_syscall1(__NR_close, fd);
 }
 
 static __attribute__((unused))
 int sys_dup(int fd)
 {
-        return my_syscall1(__NR_dup, fd);
+	return my_syscall1(__NR_dup, fd);
 }
 
 static __attribute__((unused))
 int sys_dup2(int old, int new)
 {
-        return my_syscall2(__NR_dup2, old, new);
+	return my_syscall2(__NR_dup2, old, new);
 }
 
 static __attribute__((unused))
 int sys_execve(const char *filename, char *const argv[], char *const envp[])
 {
-        return my_syscall3(__NR_execve, filename, argv, envp);
+	return my_syscall3(__NR_execve, filename, argv, envp);
 }
 
 static __attribute__((unused))
 pid_t sys_fork(void)
 {
-        return my_syscall0(__NR_fork);
+	return my_syscall0(__NR_fork);
 }
 
 static __attribute__((unused))
 int sys_fsync(int fd)
 {
-        return my_syscall1(__NR_fsync, fd);
+	return my_syscall1(__NR_fsync, fd);
 }
 
 static __attribute__((unused))
 int sys_getdents64(int fd, struct linux_dirent64 *dirp, int count)
 {
-        return my_syscall3(__NR_getdents64, fd, dirp, count);
+	return my_syscall3(__NR_getdents64, fd, dirp, count);
 }
 
 static __attribute__((unused))
 pid_t sys_getpgrp(void)
 {
-        return my_syscall0(__NR_getpgrp);
+	return my_syscall0(__NR_getpgrp);
 }
 
 static __attribute__((unused))
 pid_t sys_getpid(void)
 {
-        return my_syscall0(__NR_getpid);
+	return my_syscall0(__NR_getpid);
 }
 
 static __attribute__((unused))
 int sys_ioctl(int fd, unsigned long req, void *value)
 {
-        return my_syscall3(__NR_ioctl, fd, req, value);
+	return my_syscall3(__NR_ioctl, fd, req, value);
 }
 
 static __attribute__((unused))
 int sys_kill(pid_t pid, int signal)
 {
-        return my_syscall2(__NR_kill, pid, signal);
+	return my_syscall2(__NR_kill, pid, signal);
 }
 
 static __attribute__((unused))
 int sys_link(const char *old, const char *new)
 {
-        return my_syscall2(__NR_link, old, new);
+	return my_syscall2(__NR_link, old, new);
 }
 
 static __attribute__((unused))
 off_t sys_lseek(int fd, off_t offset, int whence)
 {
-        return my_syscall3(__NR_lseek, fd, offset, whence);
+	return my_syscall3(__NR_lseek, fd, offset, whence);
 }
 
 static __attribute__((unused))
 int sys_mkdir(const char *path, mode_t mode)
 {
-        return my_syscall2(__NR_mkdir, path, mode);
+	return my_syscall2(__NR_mkdir, path, mode);
 }
 
 static __attribute__((unused))
 long sys_mknod(const char *path, mode_t mode, dev_t dev)
 {
-        return my_syscall3(__NR_mknod, path, mode, dev);
+	return my_syscall3(__NR_mknod, path, mode, dev);
 }
 
 static __attribute__((unused))
 int sys_mount(const char *src, const char *tgt, const char *fst,
                      unsigned long flags, const void *data)
 {
-        return my_syscall5(__NR_mount, src, tgt, fst, flags, data);
+	return my_syscall5(__NR_mount, src, tgt, fst, flags, data);
 }
 
 static __attribute__((unused))
 int sys_open(const char *path, int flags, mode_t mode)
 {
-        return my_syscall3(__NR_open, path, flags, mode);
+	return my_syscall3(__NR_open, path, flags, mode);
 }
 
 static __attribute__((unused))
 int sys_pivot_root(const char *new, const char *old)
 {
-        return my_syscall2(__NR_pivot_root, new, old);
+	return my_syscall2(__NR_pivot_root, new, old);
 }
 
 static __attribute__((unused))
@@ -1153,19 +1153,19 @@ int sys_poll(struct pollfd *fds, int nfds, int timeout)
 static __attribute__((unused))
 ssize_t sys_read(int fd, void *buf, size_t count)
 {
-        return my_syscall3(__NR_read, fd, buf, count);
+	return my_syscall3(__NR_read, fd, buf, count);
 }
 
 static __attribute__((unused))
 ssize_t sys_reboot(int magic1, int magic2, int cmd, void *arg)
 {
-        return my_syscall4(__NR_reboot, magic1, magic2, cmd, arg);
+	return my_syscall4(__NR_reboot, magic1, magic2, cmd, arg);
 }
 
 static __attribute__((unused))
 int sys_sched_yield(void)
 {
-        return my_syscall0(__NR_sched_yield);
+	return my_syscall0(__NR_sched_yield);
 }
 
 static __attribute__((unused))
@@ -1180,68 +1180,68 @@ int sys_select(int nfds, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeva
 static __attribute__((unused))
 int sys_setpgid(pid_t pid, pid_t pgid)
 {
-        return my_syscall2(__NR_setpgid, pid, pgid);
+	return my_syscall2(__NR_setpgid, pid, pgid);
 }
 
 static __attribute__((unused))
 pid_t sys_setsid(void)
 {
-        return my_syscall0(__NR_setsid);
+	return my_syscall0(__NR_setsid);
 }
 
 static __attribute__((unused))
 int sys_stat(const char *path, struct stat *buf)
 {
-        return my_syscall2(__NR_stat, path, buf);
+	return my_syscall2(__NR_stat, path, buf);
 }
 
 
 static __attribute__((unused))
 int sys_symlink(const char *old, const char *new)
 {
-        return my_syscall2(__NR_symlink, old, new);
+	return my_syscall2(__NR_symlink, old, new);
 }
 
 static __attribute__((unused))
 mode_t sys_umask(mode_t mode)
 {
-        return my_syscall1(__NR_umask, mode);
+	return my_syscall1(__NR_umask, mode);
 }
 
 static __attribute__((unused))
 int sys_umount2(const char *path, int flags)
 {
-        return my_syscall2(__NR_umount2, path, flags);
+	return my_syscall2(__NR_umount2, path, flags);
 }
 
 static __attribute__((unused))
 int sys_unlink(const char *path)
 {
-        return my_syscall1(__NR_unlink, path);
+	return my_syscall1(__NR_unlink, path);
 }
 
 static __attribute__((unused))
 pid_t sys_wait4(pid_t pid, int *status, int options, struct rusage *rusage)
 {
-        return my_syscall4(__NR_wait4, pid, status, options, rusage);
+	return my_syscall4(__NR_wait4, pid, status, options, rusage);
 }
 
 static __attribute__((unused))
 pid_t sys_waitpid(pid_t pid, int *status, int options)
 {
-        return sys_wait4(pid, status, options, 0);
+	return sys_wait4(pid, status, options, 0);
 }
 
 static __attribute__((unused))
 pid_t sys_wait(int *status)
 {
-        return sys_waitpid(-1, status, 0);
+	return sys_waitpid(-1, status, 0);
 }
 
 static __attribute__((unused))
 ssize_t sys_write(int fd, const void *buf, size_t count)
 {
-        return my_syscall3(__NR_write, fd, buf, count);
+	return my_syscall3(__NR_write, fd, buf, count);
 }
 
 
