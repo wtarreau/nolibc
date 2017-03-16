@@ -238,6 +238,9 @@ struct rusage {
 #define LINUX_REBOOT_CMD_SW_SUSPEND 0xd000fce2
 
 
+/* The format of the struct as returned by the libc to the application, which
+ * significantly differs from the format returned by the stat() syscall flavours.
+ */
 struct stat {
 	dev_t     st_dev;     /* ID of device containing file */
 	ino_t     st_ino;     /* inode number */
@@ -414,6 +417,33 @@ asm(".section .text\n"
 #define O_NONBLOCK      0x800
 #define O_DIRECTORY   0x10000
 
+/* The struct returned by the stat() syscall, equivalent to stat64(). The
+ * syscall returns 116 bytes and stops in the middle of __unused.
+ */
+struct sys_stat_struct {
+	unsigned long st_dev;
+	unsigned long st_ino;
+	unsigned long st_nlink;
+	unsigned int  st_mode;
+	unsigned int  st_uid;
+
+	unsigned int  st_gid;
+	unsigned int  __pad0;
+	unsigned long st_rdev;
+	long          st_size;
+	long          st_blksize;
+
+	long          st_blocks;
+	unsigned long st_atime;
+	unsigned long st_atime_nsec;
+	unsigned long st_mtime;
+
+	unsigned long st_mtime_nsec;
+	unsigned long st_ctime;
+	unsigned long st_ctime_nsec;
+	long          __unused[3];
+};
+
 #elif defined(__i386__) || defined(__i486__) || defined(__i586__) || defined(__i686__)
 /* Syscalls for i386 :
  *   - mostly similar to x86_64
@@ -563,6 +593,32 @@ asm(".section .text\n"
 #define O_APPEND        0x400
 #define O_NONBLOCK      0x800
 #define O_DIRECTORY   0x10000
+
+/* The struct returned by the stat() syscall, 32-bit only, the syscall returns
+ * exactly 56 bytes (stops before the unused array).
+ */
+struct sys_stat_struct {
+	unsigned long  st_dev;
+	unsigned long  st_ino;
+	unsigned short st_mode;
+	unsigned short st_nlink;
+	unsigned short st_uid;
+	unsigned short st_gid;
+
+	unsigned long  st_rdev;
+	unsigned long  st_size;
+	unsigned long  st_blksize;
+	unsigned long  st_blocks;
+
+	unsigned long  st_atime;
+	unsigned long  st_atime_nsec;
+	unsigned long  st_mtime;
+	unsigned long  st_mtime_nsec;
+
+	unsigned long  st_ctime;
+	unsigned long  st_ctime_nsec;
+	unsigned long  __unused[2];
+};
 
 #elif defined(__ARM_EABI__)
 /* Syscalls for ARM in ARM or Thumb modes :
@@ -720,6 +776,40 @@ asm(".section .text\n"
 #define O_NONBLOCK      0x800
 #define O_DIRECTORY    0x4000
 
+/* The struct returned by the stat() syscall, 32-bit only, the syscall returns
+ * exactly 56 bytes (stops before the unused array). In big endian, the format
+ * differs as devices are returned as short only.
+ */
+struct sys_stat_struct {
+#if defined(__ARMEB__)
+	unsigned short st_dev;
+	unsigned short __pad1;
+#else
+	unsigned long  st_dev;
+#endif
+	unsigned long  st_ino;
+	unsigned short st_mode;
+	unsigned short st_nlink;
+	unsigned short st_uid;
+	unsigned short st_gid;
+#if defined(__ARMEB__)
+	unsigned short st_rdev;
+	unsigned short __pad2;
+#else
+	unsigned long  st_rdev;
+#endif
+	unsigned long  st_size;
+	unsigned long  st_blksize;
+	unsigned long  st_blocks;
+	unsigned long  st_atime;
+	unsigned long  st_atime_nsec;
+	unsigned long  st_mtime;
+	unsigned long  st_mtime_nsec;
+	unsigned long  st_ctime;
+	unsigned long  st_ctime_nsec;
+	unsigned long  __unused[2];
+};
+
 #elif defined(__aarch64__)
 /* Syscalls for AARCH64 :
  *   - registers are 64-bit
@@ -859,6 +949,34 @@ asm(".section .text\n"
 #define O_APPEND        0x400
 #define O_NONBLOCK      0x800
 #define O_DIRECTORY    0x4000
+
+/* The struct returned by the newfstatat() syscall. Differs slightly from the
+ * x86_64's stat one by field ordering, so be careful.
+ */
+struct sys_stat_struct {
+	unsigned long   st_dev;
+	unsigned long   st_ino;
+	unsigned int    st_mode;
+	unsigned int    st_nlink;
+	unsigned int    st_uid;
+	unsigned int    st_gid;
+
+	unsigned long   st_rdev;
+	unsigned long   __pad1;
+	long            st_size;
+	int             st_blksize;
+	int             __pad2;
+
+	long            st_blocks;
+	long            st_atime;
+	unsigned long   st_atime_nsec;
+	long            st_mtime;
+
+	unsigned long   st_mtime_nsec;
+	long            st_ctime;
+	unsigned long   st_ctime_nsec;
+	unsigned int    __unused[2];
+};
 
 #elif defined(__mips__) && defined(_ABIO32)
 /* Syscalls for MIPS ABI O32 :
@@ -1037,6 +1155,32 @@ asm(".section .text\n"
 #define O_EXCL         0x0400
 #define O_NOCTTY       0x0800
 #define O_DIRECTORY   0x10000
+
+/* The struct returned by the stat() syscall. 88 bytes are returned by the
+ * syscall.
+ */
+struct sys_stat_struct {
+	unsigned int  st_dev;
+	long          st_pad1[3];
+	unsigned long st_ino;
+	unsigned int  st_mode;
+	unsigned int  st_nlink;
+	unsigned int  st_uid;
+	unsigned int  st_gid;
+	unsigned int  st_rdev;
+	long          st_pad2[2];
+	long          st_size;
+	long          st_pad3;
+	long          st_atime;
+	long          st_atime_nsec;
+	long          st_mtime;
+	long          st_mtime_nsec;
+	long          st_ctime;
+	long          st_ctime_nsec;
+	long          st_blksize;
+	long          st_blocks;
+	long          st_pad4[14];
+};
 
 #endif
 
@@ -1240,7 +1384,24 @@ pid_t sys_setsid(void)
 static __attribute__((unused))
 int sys_stat(const char *path, struct stat *buf)
 {
-	return my_syscall2(__NR_stat, path, buf);
+	struct sys_stat_struct stat;
+	long ret;
+
+	ret = my_syscall2(__NR_stat, path, &stat);
+	buf->st_dev     = stat.st_dev;
+	buf->st_ino     = stat.st_ino;
+	buf->st_mode    = stat.st_mode;
+	buf->st_nlink   = stat.st_nlink;
+	buf->st_uid     = stat.st_uid;
+	buf->st_gid     = stat.st_gid;
+	buf->st_rdev    = stat.st_rdev;
+	buf->st_size    = stat.st_size;
+	buf->st_blksize = stat.st_blksize;
+	buf->st_blocks  = stat.st_blocks;
+	buf->st_atime   = stat.st_atime;
+	buf->st_mtime   = stat.st_mtime;
+	buf->st_ctime   = stat.st_ctime;
+	return ret;
 }
 
 
