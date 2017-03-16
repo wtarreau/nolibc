@@ -1217,13 +1217,21 @@ int sys_chdir(const char *path)
 static __attribute__((unused))
 int sys_chmod(const char *path, mode_t mode)
 {
+#ifdef __NR_fchmodat
+	return my_syscall4(__NR_fchmodat, AT_FDCWD, path, mode, 0);
+#else
 	return my_syscall2(__NR_chmod, path, mode);
+#endif
 }
 
 static __attribute__((unused))
 int sys_chown(const char *path, uid_t owner, gid_t group)
 {
+#ifdef __NR_fchownat
+	return my_syscall5(__NR_fchownat, AT_FDCWD, path, owner, group, 0);
+#else
 	return my_syscall3(__NR_chown, path, owner, group);
+#endif
 }
 
 static __attribute__((unused))
@@ -1301,7 +1309,11 @@ int sys_kill(pid_t pid, int signal)
 static __attribute__((unused))
 int sys_link(const char *old, const char *new)
 {
+#ifdef __NR_linkat
+	return my_syscall5(__NR_linkat, AT_FDCWD, old, AT_FDCWD, new, 0);
+#else
 	return my_syscall2(__NR_link, old, new);
+#endif
 }
 
 static __attribute__((unused))
@@ -1313,13 +1325,21 @@ off_t sys_lseek(int fd, off_t offset, int whence)
 static __attribute__((unused))
 int sys_mkdir(const char *path, mode_t mode)
 {
+#ifdef __NR_mkdirat
+	return my_syscall3(__NR_mkdirat, AT_FDCWD, path, mode);
+#else
 	return my_syscall2(__NR_mkdir, path, mode);
+#endif
 }
 
 static __attribute__((unused))
 long sys_mknod(const char *path, mode_t mode, dev_t dev)
 {
+#ifdef __NR_mknodat
+	return my_syscall4(__NR_mknodat, AT_FDCWD, path, mode, dev);
+#else
 	return my_syscall3(__NR_mknod, path, mode, dev);
+#endif
 }
 
 static __attribute__((unused))
@@ -1332,7 +1352,11 @@ int sys_mount(const char *src, const char *tgt, const char *fst,
 static __attribute__((unused))
 int sys_open(const char *path, int flags, mode_t mode)
 {
+#ifdef __NR_openat
+	return my_syscall4(__NR_openat, AT_FDCWD, path, flags, mode);
+#else
 	return my_syscall3(__NR_open, path, flags, mode);
+#endif
 }
 
 static __attribute__((unused))
@@ -1418,7 +1442,11 @@ int sys_stat(const char *path, struct stat *buf)
 static __attribute__((unused))
 int sys_symlink(const char *old, const char *new)
 {
+#ifdef __NR_symlinkat
+	return my_syscall3(__NR_symlinkat, old, AT_FDCWD, new);
+#else
 	return my_syscall2(__NR_symlink, old, new);
+#endif
 }
 
 static __attribute__((unused))
@@ -1436,7 +1464,11 @@ int sys_umount2(const char *path, int flags)
 static __attribute__((unused))
 int sys_unlink(const char *path)
 {
+#ifdef __NR_unlinkat
+	return my_syscall3(__NR_unlinkat, AT_FDCWD, path, 0);
+#else
 	return my_syscall1(__NR_unlink, path);
+#endif
 }
 
 static __attribute__((unused))
