@@ -224,6 +224,11 @@ struct rusage {
 #define DT_LNK    10
 #define DT_SOCK   12
 
+/* all the *at functions */
+#ifndef AT_FDWCD
+#define AT_FDCWD             -100
+#endif
+
 /* lseek */
 #define SEEK_SET        0
 #define SEEK_CUR        1
@@ -1387,7 +1392,12 @@ int sys_stat(const char *path, struct stat *buf)
 	struct sys_stat_struct stat;
 	long ret;
 
+#ifdef __NR_newfstatat
+	/* only solution for arm64 */
+	ret = my_syscall4(__NR_newfstatat, AT_FDCWD, path, &stat, 0);
+#else
 	ret = my_syscall2(__NR_stat, path, &stat);
+#endif
 	buf->st_dev     = stat.st_dev;
 	buf->st_ino     = stat.st_ino;
 	buf->st_mode    = stat.st_mode;
