@@ -1112,7 +1112,7 @@ struct sys_stat_struct {
 	register long _arg5 = (long)(arg5);				\
                                                                               \
 	asm volatile (                                                        \
-		"addiu $sp, $sp, -31\n"                                       \
+		"addiu $sp, $sp, -32\n"                                       \
 		"sw %7, 16($sp)\n"                                            \
 		"syscall\n  "                                                 \
 		"addiu $sp, $sp, 32\n"                                        \
