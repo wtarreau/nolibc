@@ -164,6 +164,12 @@ struct timeval {
 	long    tv_usec;
 };
 
+/* for gettimeofday() */
+struct timezone {
+	int tz_minuteswest;
+	int tz_dsttime;
+};
+
 /* for getdents64() */
 struct linux_dirent64 {
 	uint64_t       d_ino;
@@ -1295,6 +1301,12 @@ pid_t sys_getpid(void)
 }
 
 static __attribute__((unused))
+int sys_gettimeofday(struct timeval *tv, struct timezone *tz)
+{
+	return my_syscall2(__NR_gettimeofday, tv, tz);
+}
+
+static __attribute__((unused))
 int sys_ioctl(int fd, unsigned long req, void *value)
 {
 	return my_syscall3(__NR_ioctl, fd, req, value);
@@ -1655,6 +1667,18 @@ static __attribute__((unused))
 pid_t getpid(void)
 {
 	pid_t ret = sys_getpid();
+
+	if (ret < 0) {
+		SET_ERRNO(-ret);
+		ret = -1;
+	}
+	return ret;
+}
+
+static __attribute__((unused))
+int gettimeofday(struct timeval *tv, struct timezone *tz)
+{
+	int ret = sys_gettimeofday(tv, tz);
 
 	if (ret < 0) {
 		SET_ERRNO(-ret);
