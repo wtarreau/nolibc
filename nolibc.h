@@ -1351,10 +1351,10 @@ int sys_sched_yield(void)
 static __attribute__((unused))
 int sys_select(int nfds, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeval *timeout)
 {
-#ifndef __NR_select
-#define __NR_select __NR__newselect
+#ifndef __NR__newselect
+#define __NR__newselect __NR_select
 #endif
-	return my_syscall5(__NR_select, nfds, rfds, wfds, efds, timeout);
+	return my_syscall5(__NR__newselect, nfds, rfds, wfds, efds, timeout);
 }
 
 static __attribute__((unused))
