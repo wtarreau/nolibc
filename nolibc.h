@@ -15,91 +15,14 @@
 #define NOLIBC
 
 /* Build a static executable this way :
- *      $ gcc -fno-asynchronous-unwind-tables -s -Os -nostdlib -static \
- *            -include nolibc.h -lgcc -o hello hello.c
- *      $ strip -R .comment init-nolib
+ *      $ gcc -fno-asynchronous-unwind-tables -fno-ident -s -Os -nostdlib \
+ *            -static -include nolibc.h -lgcc -o hello hello.c
  *
  * Useful calling convention table found here :
  *      http://man7.org/linux/man-pages/man2/syscall.2.html
  *
  * This doc is even better :
  *      https://w3challs.com/syscalls/
- *
- * Architecture calling conventions
- * Every architecture has its own way of invoking and passing  arguments  to  the
- * kernel.   The  details  for various architectures are listed in the two tables
- * below.
- *
- * The first table lists the instruction  used  to  transition  to  kernel  mode,
- * (which  might  not  be the fastest or best way to transition to the kernel, so
- * you might have to refer to the VDSO), the register used to indicate the system
- * call number, and the register used to return the system call result.
- *
- * arch/ABI    instruction           syscall #  retval  error    Notes
- * --------------------------------------------------------------------
- * alpha       callsys               v0         a0      a3       [1]
- * arc         trap0                 r8         r0      -
- * arm/OABI    swi NR                -          a1      -        [2]
- * arm/EABI    swi 0x0               r7         r0      -
- * arm64       svc #0                x8         x0      -
- * blackfin    excpt 0x0             P0         R0      -
- * i386        int $0x80             eax        eax     -
- * ia64        break 0x100000        r15        r8      r10      [1]
- * m68k        trap #0               d0         d0      -
- * microblaze  brki r14,8            r12        r3      -
- * mips        syscall               v0         v0      a3       [1]
- * nios2       trap                  r2         r2      r7
- * parisc      ble 0x100(%sr2, %r0)  r20        r28     -
- * powerpc     sc                    r0         r3      r0       [1]
- * s390        svc 0                 r1         r2      -        [3]
- * s390x       svc 0                 r1         r2      -        [3]
- * superh      trap #0x17            r3         r0      -        [4]
- * sparc/32    t 0x10                g1         o0      psr/csr  [1]
- * sparc/64    t 0x6d                g1         o0      psr/csr  [1]
- * tile        swint1                R10        R00     R01      [1]
- * x86_64      syscall               rax        rax     -        [5]
- * x32         syscall               rax        rax     -        [5]
- * xtensa      syscall               a2         a2      -
- *
- * [1] On a few architectures, a register is used as a boolean (0
- *     indicating no error, and -1 indicating an error) to signal that
- *     the system call failed.  The actual error value is still
- *     contained in the return register.  On sparc, the carry bit
- *     (csr) in the processor status register (psr) is used instead of
- *     a full register.
- *
- *
- * Registers used :
- *
- * arch/ABI      arg1  arg2  arg3  arg4  arg5  arg6  arg7  Notes
- * --------------------------------------------------------------
- * alpha         a0    a1    a2    a3    a4    a5    -
- * arc           r0    r1    r2    r3    r4    r5    -
- * arm/OABI      a1    a2    a3    a4    v1    v2    v3
- * arm/EABI      r0    r1    r2    r3    r4    r5    r6
- * arm64         x0    x1    x2    x3    x4    x5    -
- * blackfin      R0    R1    R2    R3    R4    R5    -
- * i386          ebx   ecx   edx   esi   edi   ebp   -
- * ia64          out0  out1  out2  out3  out4  out5  -
- * m68k          d1    d2    d3    d4    d5    a0    -
- * microblaze    r5    r6    r7    r8    r9    r10   -
- * mips/o32      a0    a1    a2    a3    -     -     -     [1]
- * mips/n32,64   a0    a1    a2    a3    a4    a5    -
- * nios2         r4    r5    r6    r7    r8    r9    -
- * parisc        r26   r25   r24   r23   r22   r21   -
- * powerpc       r3    r4    r5    r6    r7    r8    r9
- * s390          r2    r3    r4    r5    r6    r7    -
- * s390x         r2    r3    r4    r5    r6    r7    -
- * superh        r4    r5    r6    r7    r0    r1    r2
- * sparc/32      o0    o1    o2    o3    o4    o5    -
- * sparc/64      o0    o1    o2    o3    o4    o5    -
- * tile          R00   R01   R02   R03   R04   R05   -
- * x86_64        rdi   rsi   rdx   r10   r8    r9    -
- * x32           rdi   rsi   rdx   r10   r8    r9    -
- * xtensa        a6    a3    a4    a5    a8    a9    -
- *
- *  [1] The mips/o32 system call convention passes arguments 5 through 8 on the
- *      user stack.
  */
 
 
