@@ -416,7 +416,10 @@ struct sys_stat_struct {
  *     don't have to experience issues with register contraints.
  *   - the syscall number is always specified last in order to allow to force
  *     some registers before (gcc refuses a %-register at the last position).
+ *
+ * Also, i386 supports the old_select syscall if newselect is not available
  */
+#define __ARCH_WANT_SYS_OLD_SELECT
 
 #define my_syscall0(num)                                                      \
 ({                                                                            \
@@ -593,7 +596,10 @@ struct sys_stat_struct {
  *     don't have to experience issues with register contraints.
  *   - the syscall number is always specified last in order to allow to force
  *     some registers before (gcc refuses a %-register at the last position).
+ *
+ * Also, ARM supports the old_select syscall if newselect is not available
  */
+#define __ARCH_WANT_SYS_OLD_SELECT
 
 #define my_syscall0(num)                                                      \
 ({                                                                            \
@@ -1351,10 +1357,19 @@ int sys_sched_yield(void)
 static __attribute__((unused))
 int sys_select(int nfds, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeval *timeout)
 {
+#if defined(__ARCH_WANT_SYS_OLD_SELECT) && !defined(__NR__newselect)
+	struct sel_arg_struct {
+		unsigned long n;
+		fd_set *r, *w, *e;
+		struct timeval *t;
+	} arg = { .n = nfds, .r = rfds, .w = wfds, .e = efds, .t = timeout };
+	return my_syscall1(__NR_select, &arg);
+#else
 #ifndef __NR__newselect
 #define __NR__newselect __NR_select
 #endif
 	return my_syscall5(__NR__newselect, nfds, rfds, wfds, efds, timeout);
+#endif
 }
 
 static __attribute__((unused))
