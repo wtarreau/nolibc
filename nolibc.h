@@ -111,6 +111,12 @@ struct timeval {
 	long    tv_usec;
 };
 
+/* for pselect() */
+struct timespec {
+	long    tv_sec;
+	long    tv_nsec;
+};
+
 /* for gettimeofday() */
 struct timezone {
 	int tz_minuteswest;
@@ -806,7 +812,10 @@ struct sys_stat_struct {
  *   - the arguments are cast to long and assigned into the target registers
  *     which are then simply passed as registers to the asm code, so that we
  *     don't have to experience issues with register contraints.
+ *
+ * On aarch64, select() is not implemented so we have to use pselect6().
  */
+#define __ARCH_WANT_SYS_PSELECT6
 
 #define my_syscall0(num)                                                      \
 ({                                                                            \
@@ -1405,6 +1414,14 @@ int sys_select(int nfds, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeva
 		struct timeval *t;
 	} arg = { .n = nfds, .r = rfds, .w = wfds, .e = efds, .t = timeout };
 	return my_syscall1(__NR_select, &arg);
+#elif defined(__ARCH_WANT_SYS_PSELECT6) && defined(__NR_pselect6)
+	struct timespec t;
+
+	if (timeout) {
+		t.tv_sec  = timeout->tv_sec;
+		t.tv_nsec = timeout->tv_usec * 1000;
+	}
+	return my_syscall6(__NR_pselect6, nfds, rfds, wfds, efds, timeout ? &t : NULL, NULL);
 #else
 #ifndef __NR__newselect
 #define __NR__newselect __NR_select
