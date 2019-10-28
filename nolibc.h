@@ -1564,9 +1564,15 @@ int sys_getdents64(int fd, struct linux_dirent64 *dirp, int count)
 }
 
 static __attribute__((unused))
+pid_t sys_getpgid(pid_t pid)
+{
+	return my_syscall1(__NR_getpgid, pid);
+}
+
+static __attribute__((unused))
 pid_t sys_getpgrp(void)
 {
-	return my_syscall0(__NR_getpgrp);
+	return sys_getpgid(0);
 }
 
 static __attribute__((unused))
@@ -1961,6 +1967,18 @@ static __attribute__((unused))
 int getdents64(int fd, struct linux_dirent64 *dirp, int count)
 {
 	int ret = sys_getdents64(fd, dirp, count);
+
+	if (ret < 0) {
+		SET_ERRNO(-ret);
+		ret = -1;
+	}
+	return ret;
+}
+
+static __attribute__((unused))
+pid_t getpgid(pid_t pid)
+{
+	pid_t ret = sys_getpgid(pid);
 
 	if (ret < 0) {
 		SET_ERRNO(-ret);
