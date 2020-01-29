@@ -113,6 +113,7 @@
 #include <asm/errno.h>
 #include <linux/fs.h>
 #include <linux/loop.h>
+#include <linux/time.h>
 
 #define NOLIBC
 
@@ -169,24 +170,6 @@ struct pollfd {
 	int fd;
 	short int events;
 	short int revents;
-};
-
-/* for select() */
-struct timeval {
-	long    tv_sec;
-	long    tv_usec;
-};
-
-/* for pselect() */
-struct timespec {
-	long    tv_sec;
-	long    tv_nsec;
-};
-
-/* for gettimeofday() */
-struct timezone {
-	int tz_minuteswest;
-	int tz_dsttime;
 };
 
 /* for getdents64() */
