@@ -30,7 +30,7 @@
  * away by the compiler when not used.
  *
  * Syscalls are split into 3 levels:
- *   - the lower level is the arch-specific syscall() definition, consisting in
+ *   - The lower level is the arch-specific syscall() definition, consisting in
  *     assembly code in compound expressions. These are called my_syscall0() to
  *     my_syscall6() depending on the number of arguments. The MIPS
  *     implementation is limited to 5 arguments. All input arguments are cast
@@ -38,7 +38,7 @@
  *     syscall's return value as a signed long value which is often either a
  *     pointer or the negated errno value.
  *
- *   - the second level is mostly architecture-independent. It is made of
+ *   - The second level is mostly architecture-independent. It is made of
  *     static functions called sys_<name>() which rely on my_syscallN()
  *     depending on the syscall definition. These functions are responsible
  *     for exposing the appropriate types for the syscall arguments (int,
@@ -48,7 +48,7 @@
  *     not implement select() and need pselect6() instead, so the sys_select()
  *     function will have to abstract this.
  *
- *   - the third level is the libc call definition. It exposes the lower raw
+ *   - The third level is the libc call definition. It exposes the lower raw
  *     sys_<name>() calls in a way that looks like what a libc usually does,
  *     takes care of specific input values, and of setting errno upon error.
  *     There can be minor variations compared to standard libc calls. For
