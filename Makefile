@@ -16,9 +16,9 @@ CFLAGS     := $(OPT_CFLAGS) $(CPU_CFLAGS) $(DEB_CFLAGS) $(DEF_CFLAGS) $(USR_CFLA
 LD         := $(CC)
 DEB_LFLAGS := -g
 USR_LFLAGS :=
-LIB_LFLAGS :=
-CPU_LFLAGS := -nostdlib -static -lgcc
-LDFLAGS    := $(DEB_LFLAGS) $(USR_LFLAGS) $(LIB_LFLAGS) $(CPU_LFLAGS)
+LIB_LFLAGS := -lgcc
+CPU_LFLAGS := -nostdlib -static
+LDFLAGS    := $(DEB_LFLAGS) $(USR_LFLAGS) $(CPU_LFLAGS)
 
 STRIP      := $(CROSS_COMPILE)strip
 EXAMPLES   := hello.stripped
@@ -31,7 +31,7 @@ $(EXAMPLES): %.stripped: %.bin
 	$(STRIP) -R .comment -o $@ $<
 
 %.bin: %.o
-	$(LD) $(LDFLAGS) -o $@ $<
+	$(LD) $(LDFLAGS) -o $@ $< $(LIB_LFLAGS)
 
 %.o: %.c nolibc.h
 	$(CC) $(CFLAGS) -o $@ -c $<
