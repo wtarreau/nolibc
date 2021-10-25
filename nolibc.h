@@ -104,17 +104,12 @@
 #include "nolibc-arch.h"
 #include "nolibc-types.h"
 #include "nolibc-sys.h"
+#include "nolibc-ctype.h"
 #include "nolibc-stdlib.h"
 #include "nolibc-string.h"
 
 /* Used by programs to avoid std includes */
 #define NOLIBC
-
-static __attribute__((unused))
-int isdigit(int c)
-{
-	return (unsigned int)(c - '0') <= 9;
-}
 
 static __attribute__((unused))
 const char *ltoa(long in)
