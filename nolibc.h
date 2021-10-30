@@ -105,6 +105,7 @@
 #include "nolibc-types.h"
 #include "nolibc-sys.h"
 #include "nolibc-ctype.h"
+#include "nolibc-stdio.h"
 #include "nolibc-stdlib.h"
 #include "nolibc-string.h"
 
