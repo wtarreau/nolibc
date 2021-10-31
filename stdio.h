@@ -305,4 +305,10 @@ int printf(const char *fmt, ...)
 	return ret;
 }
 
+static __attribute__((unused))
+void perror(const char *msg)
+{
+	fprintf(stderr, "%s%serrno=%d\n", (msg && *msg) ? msg : "", (msg && *msg) ? ": " : "", errno);
+}
+
 #endif /* _NOLIBC_STDIO_H */
