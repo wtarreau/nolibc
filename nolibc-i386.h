@@ -191,6 +191,7 @@ struct sys_stat_struct {
  *
  */
 asm(".section .text\n"
+    ".weak _start\n"
     ".global _start\n"
     "_start:\n"
     "pop %eax\n"                // argc   (first arg, %eax)
