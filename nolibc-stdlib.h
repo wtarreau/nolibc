@@ -336,7 +336,7 @@ int msleep(unsigned int msecs)
 __attribute__((weak,unused))
 int raise(int signal)
 {
-	return kill(getpid(), signal);
+	return sys_kill(sys_getpid(), signal);
 }
 
 static __attribute__((unused))
