@@ -30,6 +30,7 @@
 
 #include "std.h"
 #include "arch.h"
+#include "errno.h"
 #include "types.h"
 #include "sys.h"
 #include "stdlib.h"
