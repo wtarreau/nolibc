@@ -6,10 +6,14 @@
 #include <errno.h>
 #endif
 
+char **environ;
+
 int main(int argc, char **argv, char **envp)
 {
 	int ret;
 	int err;
+
+	environ = envp;
 
 	printf("pid : <%d>\n", getpid());
 	printf("arg1: <%ld>\n", argc > 1 ? atol(argv[1]) : 0);
@@ -21,5 +25,6 @@ int main(int argc, char **argv, char **envp)
 	printf("argc: <%d>\n", argc);
 	printf("argv: <%s>\n", argv[0]);
 	printf("envp: <%s>\n", envp[0] ? envp[0] : "none");
+	printf("PATH: <%s>\n", getenv("PATH"));
 	return 0;
 }
