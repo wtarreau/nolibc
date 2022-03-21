@@ -122,6 +122,17 @@ char *strchr(const char *s, int c)
 }
 
 static __attribute__((unused))
+int strcmp(const char *a, const char *b)
+{
+	unsigned int c;
+	int diff;
+
+	while (!(diff = (unsigned char)*a++ - (c = (unsigned char)*b++)) && c)
+		;
+	return diff;
+}
+
+static __attribute__((unused))
 char *strcpy(char *dst, const char *src)
 {
 	char *ret = dst;
@@ -203,6 +214,18 @@ char *strncat(char *dst, const char *src, size_t size)
 	return orig;
 }
 
+static __attribute__((unused))
+int strncmp(const char *a, const char *b, size_t size)
+{
+	unsigned int c;
+	int diff = 0;
+
+	while (size-- &&
+	       !(diff = (unsigned char)*a++ - (c = (unsigned char)*b++)) && c)
+		;
+
+	return diff;
+}
 
 static __attribute__((unused))
 char *strncpy(char *dst, const char *src, size_t size)
