@@ -438,4 +438,7 @@ char *u64toa(uint64_t in)
 	return itoa_buffer;
 }
 
+/* make sure to include all global symbols */
+#include "nolibc.h"
+
 #endif /* _NOLIBC_STDLIB_H */
