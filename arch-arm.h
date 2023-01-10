@@ -215,6 +215,8 @@ struct sys_stat_struct {
 	_arg1;                                                                \
 })
 
+char **environ __attribute__((weak));
+
 /* startup code */
 void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
 {
@@ -225,6 +227,8 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
 		"add %r2, %r0, $1\n"          // envp = (argc + 1) ...
 		"lsl %r2, %r2, $2\n"          //        * 4        ...
 		"add %r2, %r2, %r1\n"         //        + argv
+		"ldr %r3, 1f\n"               // r3 = &environ (see below)
+		"str %r2, [r3]\n"             // store envp into environ
 
 		"mov %r3, $8\n"               // AAPCS : sp must be 8-byte aligned in the
 		"neg %r3, %r3\n"              //         callee, and bl doesn't push (lr=pc)
@@ -234,7 +238,10 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
 		"bl main\n"                   // main() returns the status code, we'll exit with it.
 		"movs r7, $1\n"               // NR_exit == 1
 		"svc $0x00\n"
-	  );
+		".align 2\n"                  // below are the pointers to a few variables
+		"1:\n"
+		".word environ\n"
+	);
 	__builtin_unreachable();
 }
 
