@@ -110,7 +110,7 @@ struct sys_stat_struct {
 	register long _num  __asm__(_NOLIBC_SYSCALL_REG) = (num);             \
 	register long _arg1 __asm__ ("r0");                                   \
 									      \
-	__asm__  volatile (                                                   \
+	__asm__ volatile (                                                    \
 		_NOLIBC_THUMB_SET_R7                                          \
 		"svc #0\n"                                                    \
 		_NOLIBC_THUMB_RESTORE_R7                                      \
@@ -127,7 +127,7 @@ struct sys_stat_struct {
 	register long _num  __asm__(_NOLIBC_SYSCALL_REG) = (num);             \
 	register long _arg1 __asm__ ("r0") = (long)(arg1);                    \
 									      \
-	__asm__  volatile (                                                   \
+	__asm__ volatile (                                                    \
 		_NOLIBC_THUMB_SET_R7                                          \
 		"svc #0\n"                                                    \
 		_NOLIBC_THUMB_RESTORE_R7                                      \
@@ -145,7 +145,7 @@ struct sys_stat_struct {
 	register long _arg1 __asm__ ("r0") = (long)(arg1);                    \
 	register long _arg2 __asm__ ("r1") = (long)(arg2);                    \
 									      \
-	__asm__  volatile (                                                   \
+	__asm__ volatile (                                                    \
 		_NOLIBC_THUMB_SET_R7                                          \
 		"svc #0\n"                                                    \
 		_NOLIBC_THUMB_RESTORE_R7                                      \
@@ -164,7 +164,7 @@ struct sys_stat_struct {
 	register long _arg2 __asm__ ("r1") = (long)(arg2);                    \
 	register long _arg3 __asm__ ("r2") = (long)(arg3);                    \
 									      \
-	__asm__  volatile (                                                   \
+	__asm__ volatile (                                                    \
 		_NOLIBC_THUMB_SET_R7                                          \
 		"svc #0\n"                                                    \
 		_NOLIBC_THUMB_RESTORE_R7                                      \
@@ -184,7 +184,7 @@ struct sys_stat_struct {
 	register long _arg3 __asm__ ("r2") = (long)(arg3);                    \
 	register long _arg4 __asm__ ("r3") = (long)(arg4);                    \
 									      \
-	__asm__  volatile (                                                   \
+	__asm__ volatile (                                                    \
 		_NOLIBC_THUMB_SET_R7                                          \
 		"svc #0\n"                                                    \
 		_NOLIBC_THUMB_RESTORE_R7                                      \
@@ -205,7 +205,7 @@ struct sys_stat_struct {
 	register long _arg4 __asm__ ("r3") = (long)(arg4);                    \
 	register long _arg5 __asm__ ("r4") = (long)(arg5);                    \
 									      \
-	__asm__  volatile (                                                   \
+	__asm__ volatile (                                                    \
 		_NOLIBC_THUMB_SET_R7                                          \
 		"svc #0\n"                                                    \
 		_NOLIBC_THUMB_RESTORE_R7                                      \
@@ -227,7 +227,7 @@ struct sys_stat_struct {
 	register long _arg5 __asm__ ("r4") = (long)(arg5);                    \
 	register long _arg6 __asm__ ("r5") = (long)(arg6);                    \
 									      \
-	__asm__  volatile (                                                   \
+	__asm__ volatile (                                                    \
 		_NOLIBC_THUMB_SET_R7                                          \
 		"svc #0\n"                                                    \
 		_NOLIBC_THUMB_RESTORE_R7                                      \
