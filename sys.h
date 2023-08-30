@@ -26,7 +26,6 @@
 #ifndef _NOLIBC_SYS_H
 #define _NOLIBC_SYS_H
 
-#include <stdarg.h>
 #include "std.h"
 
 /* system includes */
@@ -44,6 +43,7 @@
 
 #include "arch.h"
 #include "errno.h"
+#include "stdarg.h"
 #include "types.h"
 
 
