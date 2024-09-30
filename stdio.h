@@ -34,6 +34,7 @@
 #include "stdarg.h"
 #include "stdlib.h"
 #include "string.h"
+#include "compiler.h"
 
 #ifndef EOF
 #define EOF (-1)
@@ -283,7 +284,7 @@ int vfprintf(FILE *stream, const char *fmt, va_list args)
 				case 'p':
 					*(out++) = '0';
 					*(out++) = 'x';
-					/* fall through */
+					__nolibc_fallthrough;
 				default: /* 'x' and 'p' above */
 					u64toh_r(v, out);
 					break;
