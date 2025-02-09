@@ -124,6 +124,7 @@
 #include "string.h"
 #include "time.h"
 #include "stackprotector.h"
+#include "dirent.h"
 
 /* Used by programs to avoid std includes */
 #define NOLIBC

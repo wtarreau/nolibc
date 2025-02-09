@@ -24,6 +24,7 @@ all_files := \
 		compiler.h \
 		crt.h \
 		ctype.h \
+		dirent.h \
 		errno.h \
 		nolibc.h \
 		signal.h \
