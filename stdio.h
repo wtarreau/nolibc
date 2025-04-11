@@ -305,6 +305,8 @@ int vfprintf(FILE *stream, const char *fmt, va_list args)
 				if (c == 'l') {
 					/* long format prefix, maintain the escape */
 					lpref++;
+				} else if (c == 'j') {
+					lpref = 2;
 				}
 				escape = 1;
 				goto do_escape;
