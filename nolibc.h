@@ -125,6 +125,7 @@
 #include "time.h"
 #include "stackprotector.h"
 #include "dirent.h"
+#include "fcntl.h"
 
 /* Used by programs to avoid std includes */
 #define NOLIBC
