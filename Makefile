@@ -39,6 +39,7 @@ all_files := \
 		stdlib.h \
 		string.h \
 		sys.h \
+		sys/auxv.h \
 		time.h \
 		types.h \
 		unistd.h \
