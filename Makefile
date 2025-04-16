@@ -25,6 +25,7 @@ all_files := \
 		crt.h \
 		ctype.h \
 		dirent.h \
+		elf.h \
 		errno.h \
 		limits.h \
 		nolibc.h \

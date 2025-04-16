@@ -116,6 +116,7 @@
 #include "types.h"
 #include "sys.h"
 #include "ctype.h"
+#include "elf.h"
 #include "signal.h"
 #include "unistd.h"
 #include "stdio.h"
