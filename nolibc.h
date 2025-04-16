@@ -117,6 +117,7 @@
 #include "sys.h"
 #include "sys/auxv.h"
 #include "sys/mman.h"
+#include "sys/stat.h"
 #include "ctype.h"
 #include "elf.h"
 #include "signal.h"
