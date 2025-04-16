@@ -119,6 +119,7 @@
 #include "sys/mman.h"
 #include "sys/stat.h"
 #include "sys/syscall.h"
+#include "sys/time.h"
 #include "ctype.h"
 #include "elf.h"
 #include "signal.h"

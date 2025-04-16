@@ -43,6 +43,7 @@ all_files := \
 		sys/mman.h \
 		sys/stat.h \
 		sys/syscall.h \
+		sys/time.h \
 		time.h \
 		types.h \
 		unistd.h \
