@@ -23,6 +23,9 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/* make sure to include all global symbols */
+#include "nolibc.h"
+
 #ifndef _NOLIBC_TIME_H
 #define _NOLIBC_TIME_H
 
@@ -43,8 +46,5 @@ time_t time(time_t *tptr)
 		*tptr = tv.tv_sec;
 	return tv.tv_sec;
 }
-
-/* make sure to include all global symbols */
-#include "nolibc.h"
 
 #endif /* _NOLIBC_TIME_H */

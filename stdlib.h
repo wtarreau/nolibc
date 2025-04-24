@@ -23,6 +23,9 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/* make sure to include all global symbols */
+#include "nolibc.h"
+
 #ifndef _NOLIBC_STDLIB_H
 #define _NOLIBC_STDLIB_H
 
@@ -540,8 +543,5 @@ uintmax_t strtoumax(const char *nptr, char **endptr, int base)
 {
 	return __strtox(nptr, endptr, base, 0, UINTMAX_MAX);
 }
-
-/* make sure to include all global symbols */
-#include "nolibc.h"
 
 #endif /* _NOLIBC_STDLIB_H */

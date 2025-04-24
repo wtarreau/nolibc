@@ -23,6 +23,9 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/* make sure to include all global symbols */
+#include "nolibc.h"
+
 #ifndef _NOLIBC_ERRNO_H
 #define _NOLIBC_ERRNO_H
 
@@ -40,8 +43,5 @@ int errno __attribute__((weak));
  * because they all correspond to the highest addressable memory page.
  */
 #define MAX_ERRNO 4095
-
-/* make sure to include all global symbols */
-#include "nolibc.h"
 
 #endif /* _NOLIBC_ERRNO_H */

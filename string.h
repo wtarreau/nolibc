@@ -23,6 +23,9 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/* make sure to include all global symbols */
+#include "nolibc.h"
+
 #ifndef _NOLIBC_STRING_H
 #define _NOLIBC_STRING_H
 
@@ -323,9 +326,5 @@ int toupper(int c)
 		return c - 'a' + 'A';
 	return c;
 }
-
-
-/* make sure to include all global symbols */
-#include "nolibc.h"
 
 #endif /* _NOLIBC_STRING_H */

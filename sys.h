@@ -23,6 +23,9 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/* make sure to include all global symbols */
+#include "nolibc.h"
+
 #ifndef _NOLIBC_SYS_H
 #define _NOLIBC_SYS_H
 
@@ -1137,8 +1140,5 @@ int memfd_create(const char *name, unsigned int flags)
 {
 	return __sysret(sys_memfd_create(name, flags));
 }
-
-/* make sure to include all global symbols */
-#include "nolibc.h"
 
 #endif /* _NOLIBC_SYS_H */
