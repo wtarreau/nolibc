@@ -43,6 +43,7 @@ all_files := \
 		sys.h \
 		sys/auxv.h \
 		sys/mman.h \
+		sys/random.h \
 		sys/stat.h \
 		sys/syscall.h \
 		sys/time.h \
