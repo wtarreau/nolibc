@@ -33,6 +33,7 @@ all_files := \
 		math.h \
 		nolibc.h \
 		poll.h \
+		sched.h \
 		signal.h \
 		stackprotector.h \
 		std.h \
