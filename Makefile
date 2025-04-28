@@ -30,6 +30,7 @@ all_files := \
 		fcntl.h \
 		getopt.h \
 		limits.h \
+		math.h \
 		nolibc.h \
 		poll.h \
 		signal.h \
