@@ -39,6 +39,7 @@ all_files := \
 		std.h \
 		stdarg.h \
 		stdbool.h \
+		stddef.h \
 		stdint.h \
 		stdlib.h \
 		string.h \
