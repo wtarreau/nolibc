@@ -49,6 +49,7 @@ all_files := \
 		sys/mount.h \
 		sys/prctl.h \
 		sys/random.h \
+		sys/reboot.h \
 		sys/stat.h \
 		sys/syscall.h \
 		sys/time.h \

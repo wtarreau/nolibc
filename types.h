@@ -31,7 +31,6 @@
 
 #include "std.h"
 #include <linux/mman.h>
-#include <linux/reboot.h> /* for LINUX_REBOOT_* */
 #include <linux/stat.h>
 #include <linux/time.h>
 #include <linux/wait.h>
