@@ -128,6 +128,7 @@
 #include "sys/sysmacros.h"
 #include "sys/time.h"
 #include "sys/timerfd.h"
+#include "sys/utsname.h"
 #include "sys/wait.h"
 #include "ctype.h"
 #include "elf.h"
