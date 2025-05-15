@@ -116,6 +116,7 @@
 #include "types.h"
 #include "sys.h"
 #include "sys/auxv.h"
+#include "sys/ioctl.h"
 #include "sys/mman.h"
 #include "sys/random.h"
 #include "sys/stat.h"
