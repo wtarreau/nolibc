@@ -18,6 +18,8 @@ else
 Q=@
 endif
 
+nolibc_supported_archs := aarch64 arm loongarch m68k mips powerpc riscv s390 sparc x86
+
 nolibc_arch := $(patsubst arm64,aarch64,$(ARCH))
 arch_file := arch-$(nolibc_arch).h
 all_files := \
@@ -78,6 +80,7 @@ help:
 	@echo "  all                 call \"headers\""
 	@echo "  clean               clean the sysroot"
 	@echo "  headers             prepare a sysroot in \$${OUTPUT}sysroot"
+	@echo "  headers_all_archs   prepare a multi-arch sysroot in \$${OUTPUT}sysroot"
 	@echo "  headers_standalone  like \"headers\", and also install kernel headers"
 	@echo "  help                this help"
 	@echo ""
@@ -105,6 +108,13 @@ headers:
 headers_standalone: headers
 	$(Q)$(MAKE) -C $(srctree) headers
 	$(Q)$(MAKE) -C $(srctree) headers_install INSTALL_HDR_PATH=$(OUTPUT)sysroot
+
+# installs headers for all archs at once.
+headers_all_archs:
+	$(Q)mkdir -p "$(OUTPUT)sysroot"
+	$(Q)mkdir -p "$(OUTPUT)sysroot/include"
+	$(Q)cp --parents $(all_files) arch.h "$(OUTPUT)sysroot/include/"
+	$(Q)cp $(addsuffix .h,$(addprefix arch-,$(nolibc_supported_archs))) "$(OUTPUT)sysroot/include/"
 
 clean:
 	$(Q)rm -rf "$(OUTPUT)sysroot"
