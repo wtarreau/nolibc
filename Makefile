@@ -1,40 +1,53 @@
-TOPDIR     := $(PWD)
-DESTDIR    :=
-PREFIX     := /usr/local
 
-CROSS_COMPILE :=
+# ARCH should be set to the kernel's arch
+ARCH := $(shell uname -m)
 
-CC         := $(CROSS_COMPILE)gcc
-OPT_CFLAGS := -Os
-CPU_CFLAGS := -fno-asynchronous-unwind-tables -include $(TOPDIR)/nolibc.h
-DEB_CFLAGS := -W -Wall -Wextra -g
-DEF_CFLAGS :=
-USR_CFLAGS :=
-INC_CFLAGS :=
-CFLAGS     := $(OPT_CFLAGS) $(CPU_CFLAGS) $(DEB_CFLAGS) $(DEF_CFLAGS) $(USR_CFLAGS) $(INC_CFLAGS)
+# KDIR should be set to kernel dir
+KDIR ?= /usr/src/linux
 
-LD         := $(CC)
-DEB_LFLAGS := -g
-USR_LFLAGS :=
-LIB_LFLAGS := -lgcc
-CPU_LFLAGS := -nostdlib -static
-LDFLAGS    := $(DEB_LFLAGS) $(USR_LFLAGS) $(CPU_LFLAGS)
+# point to the root of the kernel
+srctree := $(KDIR)
 
-STRIP      := $(CROSS_COMPILE)strip
-EXAMPLES   := hello.stripped
-OBJS       :=
-OBJS       += hello.o
+# OUTPUT is only set when run from the main makefile, otherwise
+# it defaults to this nolibc directory.
+OUTPUT ?= $(CURDIR)/
 
-all: $(EXAMPLES)
+ifeq ($(V),1)
+Q=
+else
+Q=@
+endif
 
-$(EXAMPLES): %.stripped: %.bin
-	$(STRIP) -R .comment -o $@ $<
+nolibc_arch := $(patsubst arm64,aarch64,$(ARCH))
+arch_file := arch-$(nolibc_arch).h
+all_files := ctype.h errno.h nolibc.h signal.h std.h stdio.h stdlib.h string.h \
+             sys.h time.h types.h unistd.h
 
-%.bin: %.o
-	$(LD) $(LDFLAGS) -o $@ $< $(LIB_LFLAGS)
+# install all headers needed to support a bare-metal compiler
+all:
 
-%.o: %.c nolibc.h
-	$(CC) $(CFLAGS) -o $@ -c $<
+# Note: when ARCH is "x86" we concatenate both x86_64 and i386
+headers:
+	$(Q)mkdir -p $(OUTPUT)sysroot
+	$(Q)mkdir -p $(OUTPUT)sysroot/include
+	$(Q)cp $(all_files) $(OUTPUT)sysroot/include/
+	$(Q)if [ "$(ARCH)" = "x86" ]; then      \
+		sed -e                          \
+		  's,^#ifndef _NOLIBC_ARCH_X86_64_H,#if !defined(_NOLIBC_ARCH_X86_64_H) \&\& defined(__x86_64__),' \
+		  arch-x86_64.h;                \
+		sed -e                          \
+		  's,^#ifndef _NOLIBC_ARCH_I386_H,#if !defined(_NOLIBC_ARCH_I386_H) \&\& !defined(__x86_64__),' \
+		  arch-i386.h;                  \
+	elif [ -e "$(arch_file)" ]; then        \
+		cat $(arch_file);               \
+	else                                    \
+		echo "Fatal: architecture $(ARCH) not yet supported by nolibc." >&2; \
+		exit 1;                         \
+	fi > $(OUTPUT)sysroot/include/arch.h
+
+headers_standalone: headers
+	$(Q)$(MAKE) -C $(srctree) headers
+	$(Q)$(MAKE) -C $(srctree) headers_install INSTALL_HDR_PATH=$(OUTPUT)sysroot
 
 clean:
-	-rm -f $(OBJS) $(EXAMPLES) *.bin *.stripped *.[oa] *~ */*.[oa] */*~ core a.out
+	$(Q)rm -rf "$(OUTPUT)sysroot"
