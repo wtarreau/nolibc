@@ -53,6 +53,7 @@ all_files := \
 		sys/random.h \
 		sys/reboot.h \
 		sys/resource.h \
+		sys/select.h \
 		sys/stat.h \
 		sys/syscall.h \
 		sys/sysmacros.h \
