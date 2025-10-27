@@ -370,7 +370,7 @@ void *memcpy(void *dst, const void *src, size_t len);
 void *memset(void *dst, int c, size_t len);
 
 __asm__ (
-".section .text.nolibc_memmove_memcpy\n"
+".pushsection .text.nolibc_memmove_memcpy\n"
 ".weak memmove\n"
 ".weak memcpy\n"
 "memmove:\n"
@@ -390,8 +390,9 @@ __asm__ (
 	"rep movsb\n\t"
 	"cld\n\t"
 	"retq\n"
+".popsection\n"
 
-".section .text.nolibc_memset\n"
+".pushsection .text.nolibc_memset\n"
 ".weak memset\n"
 "memset:\n"
 	"xchgl %eax, %esi\n\t"
@@ -400,6 +401,7 @@ __asm__ (
 	"rep stosb\n\t"
 	"popq  %rax\n\t"
 	"retq\n"
+".popsection\n"
 );
 
 #endif /* !defined(__x86_64__) */
