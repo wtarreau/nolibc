@@ -611,9 +611,7 @@ int link(const char *old, const char *new)
 static __attribute__((unused))
 off_t sys_lseek(int fd, off_t offset, int whence)
 {
-#if defined(__NR_lseek)
-	return my_syscall3(__NR_lseek, fd, offset, whence);
-#else
+#if defined(__NR_llseek)
 	__kernel_loff_t loff = 0;
 	off_t result;
 	int ret;
@@ -627,6 +625,8 @@ off_t sys_lseek(int fd, off_t offset, int whence)
 		result = loff;
 
 	return result;
+#else
+	return my_syscall3(__NR_lseek, fd, offset, whence);
 #endif
 }
 
