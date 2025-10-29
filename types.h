@@ -32,8 +32,15 @@
 #include "std.h"
 #include <linux/mman.h>
 #include <linux/stat.h>
-#include <linux/time.h>
 #include <linux/wait.h>
+
+struct timespec {
+	time_t	tv_sec;
+	long	tv_nsec;
+};
+#define _STRUCT_TIMESPEC
+
+#include <linux/time.h>
 
 
 /* Only the generic macros and types may be defined here. The arch-specific
