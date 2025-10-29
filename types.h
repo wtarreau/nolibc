@@ -36,7 +36,7 @@
 
 struct timespec {
 	time_t	tv_sec;
-	long	tv_nsec;
+	int64_t	tv_nsec;
 };
 #define _STRUCT_TIMESPEC
 
