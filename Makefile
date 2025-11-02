@@ -28,6 +28,7 @@ all_files := \
 		errno.h \
 		fcntl.h \
 		getopt.h \
+		inttypes.h \
 		limits.h \
 		math.h \
 		nolibc.h \
